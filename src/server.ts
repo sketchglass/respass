@@ -12,15 +12,29 @@ let findLatestMessage = (num: number) => {
 
 enum ReceiveEventType {
   CREATE_MESSAGE,
+  PONG,
 }
 enum SendEventType {
   NEW_MESSAGE,
+  PING,
 }
 
-let newMessage = (message: string) => {
+class BaseReceiveEvent {
+  constructor(protected ev: ReceiveEventType, protected value: string) {
+  }
+  response() {
+  }
+}
+class CreateMessageEvent extends BaseReceiveEvent{
+  response() {
+    Message.create({text: this.value})
+    return newMessage(SendEventType.NEW_MESSAGE, this.value) 
+  }
+}
+let newMessage = (ev: SendEventType, value: string) => {
   return JSON.stringify({
-    ev: SendEventType[SendEventType.NEW_MESSAGE],
-    value: message,
+    ev: SendEventType[ev],
+    value: value,
   })
 }
 export let bootup = () => {
@@ -37,10 +51,14 @@ export let bootup = () => {
     // send latest 10 messages
     findLatestMessage(10).then((messages) => {
       messages.forEach((obj) => {
-        ws.send(newMessage((<any>obj)["text"]))
+        ws.send(newMessage(SendEventType.NEW_MESSAGE, (<any>obj)["text"]))
       })
     })
 
+    // wip
+    // setInterval(() => {
+      // ws.send(newMessage(SendEventType.PING, ""))
+    // }, 2000)
     /*
      * expected json shceme:
      * {
@@ -60,8 +78,8 @@ export let bootup = () => {
         // switching
         let {ev, value} = json
         if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-          Message.create({text: value})
-          broadcast(newMessage(value))
+          let response = new CreateMessageEvent(ev, value).response()
+          broadcast(response)
         }
       } catch(e) {
         // failed
