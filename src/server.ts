@@ -1,6 +1,5 @@
 import { Server } from "ws"
 import { Message } from "./models"
-
 let findLatestMessage = (num: number) => {
   return Message.findAll({
     limit: num,
@@ -11,10 +10,23 @@ let findLatestMessage = (num: number) => {
   })
 }
 
+enum ReceiveEventType {
+  CREATE_MESSAGE,
+}
+enum SendEventType {
+  NEW_MESSAGE,
+}
+
+let newMessage = (message: string) => {
+  return JSON.stringify({
+    ev: SendEventType[SendEventType.NEW_MESSAGE],
+    value: message,
+  })
+}
 export let bootup = () => {
   let wss = new Server({port: 8080})
 
-  let broadcast = (message): void => {
+  let broadcast = (message: string): void => {
     wss.clients.forEach((client) => {
       client.send(message)
     })
@@ -22,17 +34,38 @@ export let bootup = () => {
 
 
   wss.on('connection', (ws) => {
-    ws.send("starting connection")
     // send latest 10 messages
     findLatestMessage(10).then((messages) => {
       messages.forEach((obj) => {
-        ws.send(obj["text"])
+        ws.send(newMessage((<any>obj)["text"]))
       })
     })
 
-    ws.on('message', (message) => {
-      Message.create({text: message})
-      broadcast(message)
+    /*
+     * expected json shceme:
+     * {
+     *   "ev": "CREATE_MESSAGE",
+     *   "value": value,
+     * }
+     *
+     * result json scheme:
+     * {
+     *   "ev":"NEW_MESSAGE",
+     *   "value":""
+     * }
+     */
+    ws.on('message', (undecoded_json: string) => {
+      try {
+        let json = JSON.parse(undecoded_json)
+        // switching
+        let {ev, value} = json
+        if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
+          Message.create({text: value})
+          broadcast(newMessage(value))
+        }
+      } catch(e) {
+        // failed
+      }
     })
   })
 }
