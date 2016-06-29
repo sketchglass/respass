@@ -1,0 +1,31 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/louy/typed-sequelize/fc17dae293de0d15ccdfce2cfe827e2a789eb5a4/typings.json",
+    "raw": "registry:npm/sequelize#3.0.0+20160604152601",
+    "main": "index.d.ts",
+    "global": false,
+    "dependencies": {
+      "bluebird": {
+        "src": "https://raw.githubusercontent.com/typed-typings/npm-bluebird/b3a2c0cd5869fac056c2ce69ed5d76023b8eb472/typings.json",
+        "raw": "registry:npm/bluebird#3.3.4+20160531224558",
+        "main": "bluebird.d.ts",
+        "version": "3.3.4",
+        "global": false,
+        "name": "bluebird",
+        "type": "typings"
+      },
+      "validator": {
+        "src": "https://raw.githubusercontent.com/typed-typings/npm-validator/ac54245c62cfc865f7dc5fff78b44bf8fa8c2d05/typings.json",
+        "raw": "registry:npm/validator#4.5.1+20160429171724",
+        "main": "index.d.ts",
+        "version": "4.5.1",
+        "global": false,
+        "name": "validator",
+        "type": "typings"
+      }
+    },
+    "name": "sequelize",
+    "type": "typings"
+  }
+}

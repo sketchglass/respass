@@ -1,0 +1,22 @@
+{
+  "name": "respass",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "compile:ts": "tsc",
+    "start": "npm run compile:ts && node ./lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "minamorl",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^1.8.10"
+  },
+  "dependencies": {
+    "http": "0.0.0",
+    "sequelize": "^3.23.4",
+    "sqlite3": "^3.1.4",
+    "ws": "^1.1.1"
+  }
+}

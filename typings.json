@@ -1,0 +1,12 @@
+{
+  "name": "respass",
+  "dependencies": {
+    "sequelize": "registry:npm/sequelize#3.0.0+20160604152601"
+  },
+  "globalDependencies": {
+    "node": "registry:dt/node#6.0.0+20160621231320",
+    "sequelize": "registry:dt/sequelize#3.4.1+20160622054214",
+    "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
+    "ws": "registry:dt/ws#0.0.0+20160405094435"
+  }
+}
