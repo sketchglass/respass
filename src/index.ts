@@ -22,16 +22,15 @@ wss.on('connection', (ws) => {
     raw: true
   }).then((messages) => {
     messages.reverse()
-    console.log(messages)
     messages.forEach((obj) => {
       ws.send(obj["text"])
     })
   })
 
   ws.on('message', (message) => {
-    ws.send("received:" + message )
-    Message.create({text: message}).then(() => {
-      ws.send("saved" )
+    Message.create({text: message})
+    wss.clients.forEach((client) => {
+      client.send(message)
     })
   })
 })
