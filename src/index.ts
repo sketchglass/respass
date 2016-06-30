@@ -1,6 +1,6 @@
 import { Server } from "ws"
 import { Message } from "./models"
-import { bootup } from "./server"
+import { bootup } from "./wsserver"
 
 // define models
 Message.sync({
