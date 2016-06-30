@@ -1,6 +1,5 @@
 import { Server } from "ws"
 import { Message, User } from "./models"
-import { bootup } from "./wsserver"
 
 // define models
 Message.sync({
@@ -11,5 +10,4 @@ User.sync({
   force: true
 })
 
-
-bootup()
+import "./wsserver"

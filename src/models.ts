@@ -8,3 +8,6 @@ export let Message = sequelize.define('message', {
 export let User = sequelize.define('user', {
   name: Sequelize.STRING,
 })
+
+User.hasMany(Message)
+Message.belongsTo(User)
