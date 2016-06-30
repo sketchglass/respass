@@ -34,6 +34,10 @@ interface IMessage {
 interface IUser {
   name: string
 }
+
+
+let connection_number = 0
+
 class BaseReceiveEvent {
 
   constructor(protected user: IUser, protected ev: ReceiveEventType, protected value?: string) {
@@ -74,12 +78,18 @@ class DeleteMessageEvent extends BaseReceiveEvent{
 }
 class JoinEvent extends BaseReceiveEvent {
   response() {
-    return newMessage(SendEventType.USER_JOIN, "User " + this.user.name + " is joined.")
+    connection_number += 1
+    return newMessage(SendEventType.USER_JOIN, {
+      "connections": connection_number
+    })
   }
 }
 class LeftEvent extends BaseReceiveEvent {
   response() {
-    return newMessage(SendEventType.USER_LEAVE, "User " + this.user.name + " is left.")
+    connection_number -= 1
+    return newMessage(SendEventType.USER_LEAVE, {
+      "connections": connection_number
+    })
   }
 }
 let newMessage = (ev: SendEventType, value: any) => {
@@ -97,6 +107,7 @@ let broadcast = (message: string): void => {
 }
 
 wss.on('connection', (ws) => {
+
   // create random user name
   let random_username = Math.random().toString(36).substring(7) 
 
