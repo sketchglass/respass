@@ -1,11 +1,15 @@
 {
   "name": "respass",
   "dependencies": {
+    "mime": "registry:npm/mime#1.3.0+20160423043021",
     "sequelize": "registry:npm/sequelize#3.0.0+20160604152601"
   },
   "globalDependencies": {
+    "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160625155614",
     "node": "registry:dt/node#6.0.0+20160621231320",
     "sequelize": "registry:dt/sequelize#3.4.1+20160622054214",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
     "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
     "ws": "registry:dt/ws#0.0.0+20160405094435"
   }
