@@ -1,5 +1,6 @@
 import { Server } from "ws"
-import { Message } from "./models"
+import { Message, User } from "./models"
+
 let findLatestMessage = (num: number) => {
   return Message.findAll({
     limit: num,
@@ -24,9 +25,15 @@ enum SendEventType {
   USER_LEAVE,
   PING,
 }
+interface Message {
+  text: string,
+  user: {
+    name: string
+  }
+}
 
 class BaseReceiveEvent {
-  constructor(protected ev: ReceiveEventType, protected value: string) {
+  constructor(protected ev: ReceiveEventType, protected value: any) {
   }
   response(): string {
     return ""
@@ -34,8 +41,8 @@ class BaseReceiveEvent {
 }
 class CreateMessageEvent extends BaseReceiveEvent{
   response() {
-    Message.create({text: this.value})
-    return newMessage(SendEventType.NEW_MESSAGE, this.value) 
+    Message.create({text: this.value.text})
+    return newMessage(SendEventType.NEW_MESSAGE, this.value)
   }
 }
 class DeleteMessageEvent extends BaseReceiveEvent{
@@ -46,7 +53,7 @@ class DeleteMessageEvent extends BaseReceiveEvent{
 }
 class JoinEvent extends BaseReceiveEvent {
   response() {
-    return newMessage(SendEventType.USER_JOIN, this.value)
+    return newMessage(SendEventType.USER_JOIN, this.value as Message)
   }
 }
 class LeftEvent extends BaseReceiveEvent {
@@ -54,7 +61,7 @@ class LeftEvent extends BaseReceiveEvent {
     return newMessage(SendEventType.USER_LEAVE, this.value)
   }
 }
-let newMessage = (ev: SendEventType, value: string) => {
+let newMessage = (ev: SendEventType, value: any) => {
   return JSON.stringify({
     ev: SendEventType[ev],
     value: value,
@@ -70,16 +77,15 @@ export let bootup = () => {
   }
   
   wss.on('connection', (ws) => {
-    // join event
-    let response = new JoinEvent(ReceiveEventType.JOIN, "user joined").response()
-    broadcast(response)
+    // create random user name
+    let random_username = Math.random().toString(36).substring(7) 
 
-    // send latest 10 messages
-    findLatestMessage(10).then((messages) => {
-      messages.forEach((obj) => {
-        ws.send(newMessage(SendEventType.NEW_MESSAGE, (<any>obj)["text"]))
-      })
-    })
+    let current_user = {name: random_username}
+    User.create(current_user)
+
+    // join event
+    let response = new JoinEvent(ReceiveEventType.JOIN, "user " + current_user.name + " joined").response()
+    broadcast(response)
 
     // ping/event
     // setInterval(() => {
@@ -90,19 +96,6 @@ export let bootup = () => {
       // }
     // }, 2000)
 
-    /*
-     * expected json shceme:
-     * {
-     *   "ev": "CREATE_MESSAGE",
-     *   "value": value,
-     * }
-     *
-     * result json scheme:
-     * {
-     *   "ev":"NEW_MESSAGE",
-     *   "value":""
-     * }
-     */
     ws.on('message', (undecoded_json: string) => {
       try {
         let json = JSON.parse(undecoded_json)
@@ -110,7 +103,12 @@ export let bootup = () => {
         let messageEvent: BaseReceiveEvent
 
         if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-          messageEvent = new CreateMessageEvent(ev, value)
+          messageEvent = new CreateMessageEvent(ev, {
+            text: value,
+            user: {
+              name: current_user.name
+            }
+          })
         } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
           messageEvent = new DeleteMessageEvent(ev, value)
         }
