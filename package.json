@@ -6,11 +6,14 @@
   "scripts": {
     "compile:ts": "tsc",
     "start": "npm run compile:ts && node ./lib/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "npm run compile:ts",
+    "test": "mocha lib/test"
   },
   "author": "minamorl",
   "license": "ISC",
   "devDependencies": {
+    "mocha": "^2.5.3",
+    "power-assert": "^1.4.1",
     "typescript": "^1.8.10"
   },
   "dependencies": {
