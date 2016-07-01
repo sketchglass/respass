@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "compile:ts": "tsc",
-    "start": "npm run compile:ts && node ./lib/src/index.js",
+    "start": "npm run compile:ts && node ./lib/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "minamorl",
