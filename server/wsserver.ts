@@ -1,6 +1,7 @@
 import { Server } from "ws"
 import { Message, User } from "./models"
 import { IMessage, IUser } from "../common/data";
+import { server } from "./server";
 
 let findLatestMessage = (num: number) => {
   return Message.findAll({
@@ -85,7 +86,7 @@ let newMessage = (ev: SendEventType, value: any) => {
     value: value,
   })
 }
-let wss = new Server({port: 8080})
+let wss = new Server({server})
 
 let broadcast = (message: string): void => {
   wss.clients.forEach((client) => {
