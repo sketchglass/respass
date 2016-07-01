@@ -38,17 +38,13 @@ interface IUser {
 
 let connection_number = 0
 
-class BaseReceiveEvent {
-
+abstract class BaseReceiveEvent {
   constructor(protected user: IUser, protected ev: ReceiveEventType, protected value?: string) {
-    
   }
-  response(): string {
-    return ""
-  }
+  abstract response(target: Function): string 
 }
 class CreateMessageEvent extends BaseReceiveEvent{
-  response() {
+  response(target: Function) {
     User.findOne({
       where: {
         name: this.user.name
@@ -62,34 +58,34 @@ class CreateMessageEvent extends BaseReceiveEvent{
       })
     })
 
-    return newMessage(SendEventType.NEW_MESSAGE, {
+    return target(newMessage(SendEventType.NEW_MESSAGE, {
       text: this.value,
       user: {
         name: this.user.name
       }
-    })
+    }))
   }
 }
 class DeleteMessageEvent extends BaseReceiveEvent{
-  response() {
+  response(target: Function) {
     Message.destroy({where: {id: this.value}})
-    return newMessage(SendEventType.DELETE_MESSAGE, this.value) 
+    return target(newMessage(SendEventType.DELETE_MESSAGE, this.value) )
   }
 }
 class JoinEvent extends BaseReceiveEvent {
-  response() {
+  response(target: Function) {
     connection_number += 1
-    return newMessage(SendEventType.USER_JOIN, {
+    return target(newMessage(SendEventType.USER_JOIN, {
       "connections": connection_number
-    })
+    }))
   }
 }
 class LeftEvent extends BaseReceiveEvent {
-  response() {
+  response(target: Function) {
     connection_number -= 1
-    return newMessage(SendEventType.USER_LEAVE, {
+    return target(newMessage(SendEventType.USER_LEAVE, {
       "connections": connection_number
-    })
+    }))
   }
 }
 let newMessage = (ev: SendEventType, value: any) => {
@@ -117,8 +113,7 @@ wss.on('connection', (ws) => {
   User.create(user)
 
   // join event
-  let response = new JoinEvent(user, ReceiveEventType.JOIN).response()
-  broadcast(response)
+  new JoinEvent(user, ReceiveEventType.JOIN).response(broadcast)
 
   ws.on('message', (undecoded_json: string) => {
     try {
@@ -131,15 +126,15 @@ wss.on('connection', (ws) => {
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
         messageEvent = new DeleteMessageEvent(user, ev, value)
       }
-      broadcast(messageEvent.response())
+      messageEvent.response(broadcast)
     } catch(e) {
       // failed
     }
   })
   ws.on('close', () => {
-    let response = new LeftEvent(user, ReceiveEventType.LEFT).response()
+    let event = new LeftEvent(user, ReceiveEventType.LEFT)
     try {
-      broadcast(response)
+      event.response(broadcast)
     } catch(e) {
       // failed
     }
