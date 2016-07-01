@@ -1,4 +1,3 @@
-import { Server } from "ws"
 import { Message, User } from "./models"
 
 // define models
@@ -10,4 +9,7 @@ User.sync({
   force: true
 })
 
+import { server } from "./server";
 import "./wsserver"
+
+server.listen(8080);
