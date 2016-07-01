@@ -2,7 +2,7 @@ import {EventEmitter} from "events";
 import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
 import {IMessage} from "../../common/data";
 
-const API_SERVER = "localhost:8080";
+const API_SERVER = `${window.location.hostname}:8080`;
 
 export
 class Thread extends EventEmitter {
