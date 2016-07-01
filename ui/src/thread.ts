@@ -8,7 +8,7 @@ export
 class Thread extends EventEmitter {
   connetion = new WebSocket(`ws://${API_SERVER}`);
   messages: IMessage[] = [];
-  connection_number: number = 0
+  connectionCount = 0
 
   constructor() {
     super();
@@ -20,13 +20,13 @@ class Thread extends EventEmitter {
           const newMessage = message as NewMessageEvent;
           console.log("message received:", message);
           this.messages.push(message.value);
-          this.emit("message_update");
+          this.emit("messageUpdate");
           break;
         case "USER_JOIN":
         case "USER_LEAVE":
-          const connection_number = message.value.connections
-          this.connection_number = connection_number
-          this.emit("connection_update")
+          const connectionCount = message.value.connections
+          this.connectionCount = connectionCount
+          this.emit("connectionUpdate")
           break;
         default:
           break;
@@ -43,7 +43,7 @@ class Thread extends EventEmitter {
     const response = await fetch(`http://${API_SERVER}/messages`);
     const messages: IMessage[] = await response.json();
     this.messages.push(...messages);
-    this.emit("message_update");
+    this.emit("messageUpdate");
   }
 
   newMessage(message: string) {
