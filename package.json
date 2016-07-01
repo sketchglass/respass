@@ -5,22 +5,42 @@
   "main": "lib/index.js",
   "scripts": {
     "compile:ts": "tsc",
+    "build:frontend": "cd ui && webpack",
+    "watch:frontend": "cd ui && webpack-dev-server",
+    "open-browser": "node -e 'setTimeout(function(){require(`open`)(`http://localhost:23000/webpack-dev-server/`)}, 2000)'",
+    "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
+    "start:server": "npm run compile:ts && node ./lib/server/index.js",
+    "start": "npm-run-all --parallel start:server start:frontend",
     "pretest": "npm run compile:ts",
-    "test": "mocha lib/test",
-    "start": "npm run compile:ts && node ./lib/server/index.js"
+    "test": "mocha lib/test"
   },
   "author": "minamorl",
   "license": "ISC",
   "devDependencies": {
     "mocha": "^2.5.3",
     "power-assert": "^1.4.1",
-    "typescript": "^1.8.10"
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2016": "^6.11.0",
+    "css-loader": "^0.23.1",
+    "node-sass": "^3.8.0",
+    "npm-run-all": "^2.3.0",
+    "open": "0.0.5",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "express": "^4.14.0",
     "http": "0.0.0",
     "sequelize": "^3.23.4",
     "sqlite3": "^3.1.4",
-    "ws": "^1.1.1"
+    "ws": "^1.1.1",
+    "normalize.css": "^4.1.1",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
   }
 }
