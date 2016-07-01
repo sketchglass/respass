@@ -2,31 +2,7 @@ import { Server } from "ws"
 import { Message, User } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { server } from "./server";
-
-let findLatestMessage = (num: number) => {
-  return Message.findAll({
-    limit: num,
-    order: "id DESC",
-    raw: true
-  }).then((messages) => {
-    return messages.reverse()
-  })
-}
-
-enum ReceiveEventType {
-  CREATE_MESSAGE,
-  DELETE_MESSAGE,
-  JOIN,
-  PONG,
-  LEFT,
-}
-enum SendEventType {
-  NEW_MESSAGE,
-  DELETE_MESSAGE,
-  USER_JOIN,
-  USER_LEAVE,
-  PING,
-}
+import { ReceiveEventType, SendEventType } from "../common/eventType" 
 
 let connection_number = 0
 
