@@ -45,7 +45,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
       messages: [],
       connection_number: 0
     };
-    thread.on("message", () => {
+    thread.on("message_update", () => {
       const {messages} = thread;
       this.setState({messages});
     });

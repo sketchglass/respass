@@ -1,10 +1,13 @@
 import * as http from "http";
 import * as express from "express";
+const cors = require("cors");
 import {Message, User} from "./models";
 import {IMessage} from "../common/data";
 
 export const server = http.createServer();
 const app = express();
+
+app.use(cors());
 
 app.get("/messages", async (req, res) => {
   const messages: any[] = await Message.findAll({

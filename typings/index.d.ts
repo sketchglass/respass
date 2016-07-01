@@ -9,6 +9,7 @@
 /// <reference path="globals/react/index.d.ts" />
 /// <reference path="globals/serve-static/index.d.ts" />
 /// <reference path="globals/socket.io/index.d.ts" />
+/// <reference path="globals/whatwg-fetch/index.d.ts" />
 /// <reference path="globals/ws/index.d.ts" />
 /// <reference path="modules/mime/index.d.ts" />
 /// <reference path="modules/sequelize/index.d.ts" />
