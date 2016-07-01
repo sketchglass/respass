@@ -7,7 +7,6 @@ const app = express();
 
 app.get("/messages", async (req, res) => {
   const messages = await Message.findAll({
-    limit: 100,
     order: "createdAt",
     raw: true
   });
