@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Message, thread} from "../thread";
+import {thread} from "../thread";
+import {IMessage} from "../../../common/data";
 
-const MessageView = (props: {message: Message}) => {
+const MessageView = (props: {message: IMessage}) => {
   const {text, user} = props.message;
   return (
     <div className="message">
@@ -31,7 +32,7 @@ class MessageForm extends React.Component<{}, {}> {
 }
 
 interface ThreadViewState {
-  messages?: Message[],
+  messages?: IMessage[],
   connection_number?: number;
 }
 
