@@ -7,7 +7,7 @@ import { ReceiveEventType, SendEventType } from "../common/eventType"
 let connection_number = 0
 
 abstract class BaseReceiveEvent {
-  constructor(protected user: IUser, protected ev: ReceiveEventType, protected value?: string) {
+  constructor(protected user: IUser, protected ev?: ReceiveEventType, protected value?: string) {
   }
   abstract response(target: Function): string
 }
@@ -83,28 +83,59 @@ wss.on('connection', (ws) => {
   // join event
   new JoinEvent(user, ReceiveEventType.JOIN).response(broadcast)
 
+  // ping/pong event
+  let ping_count: number = 0
+  let ping_available: boolean = false
+  
+  setInterval(() => {
+    try {
+      if (ws.readyState == ws.OPEN) {
+        ws.send(newMessage(SendEventType.PING, ping_count++))
+        setTimeout(() => {
+          if(ping_available === false) {
+            ws.close()
+          }
+        } ,10000)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },2000)
+
+
+
   ws.on('message', (undecoded_json: string) => {
     try {
       let json = JSON.parse(undecoded_json)
       let {ev, value} = json
       let messageEvent: BaseReceiveEvent
+      ping_available = false
 
       if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
         messageEvent = new CreateMessageEvent(user, ev, value)
+        ping_available = true
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
         messageEvent = new DeleteMessageEvent(user, ev, value)
+        ping_available = true
+      } 
+      if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
+        if (++value == ping_count) {
+          ping_available = true
+        }
       }
       messageEvent.response(broadcast)
     } catch(e) {
       // failed
     }
   })
-  ws.on('close', () => {
+
+  let onClose = () => {
     let event = new LeftEvent(user, ReceiveEventType.LEFT)
     try {
       event.response(broadcast)
     } catch(e) {
       // failed
     }
-  })
+  }
+  ws.on('close', onClose) 
 })

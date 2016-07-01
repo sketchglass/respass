@@ -28,6 +28,9 @@ class Thread extends EventEmitter {
           this.connectionCount = connectionCount
           this.emit("connectionUpdate")
           break;
+        case "PING":
+          const pingId: number = message.value
+          this.pong(pingId)
         default:
           break;
         }
@@ -52,6 +55,14 @@ class Thread extends EventEmitter {
       value: message
     };
     this.connetion.send(JSON.stringify(createMessage));
+  }
+
+  pong(pingId: number) {
+    const pongMessage = {
+      ev: "PONG",
+      value: pingId
+    }
+    this.connetion.send(JSON.stringify(pongMessage))
   }
 }
 
