@@ -1,27 +1,11 @@
 import {EventEmitter} from "events";
-
-interface NewMessageEvent {
-  ev: "NEW_MESSAGE";
-  value: Message;
-}
-
-interface CreateMessageEvent {
-  ev: "CREATE_MESSAGE";
-  value: string;
-}
-
-export
-interface Message {
-  text: string;
-  user: {
-    name: string;
-  };
-}
+import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
+import {IMessage} from "../../common/data";
 
 export
 class Thread extends EventEmitter {
   connetion = new WebSocket("ws://localhost:8080");
-  messages: Message[] = [];
+  messages: IMessage[] = [];
   connection_number: number = 0
 
   constructor() {
