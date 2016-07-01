@@ -35,6 +35,7 @@ class Thread extends EventEmitter {
         console.error(error);
       }
     }
+    // TODO: メッセージを取りこぼさないようにする
     this.fetchAllMessages();
   }
 
