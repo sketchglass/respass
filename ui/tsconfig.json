@@ -7,8 +7,9 @@
         "jsx": "react",
         "outDir": "./lib"
     },
-    "exclude": [
-        "node_modules"
+    "files": [
+      "../typings/index.d.ts",
+      "./src/index.tsx"
     ],
     "compileOnSave": false
 }
