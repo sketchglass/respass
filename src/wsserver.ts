@@ -1,5 +1,6 @@
 import { Server } from "ws"
 import { Message, User } from "./models"
+import { IMessage, IUser } from "../common/data";
 
 let findLatestMessage = (num: number) => {
   return Message.findAll({
@@ -25,23 +26,13 @@ enum SendEventType {
   USER_LEAVE,
   PING,
 }
-interface IMessage {
-  text: string,
-  user: {
-    name: string
-  }
-}
-interface IUser {
-  name: string
-}
-
 
 let connection_number = 0
 
 abstract class BaseReceiveEvent {
   constructor(protected user: IUser, protected ev: ReceiveEventType, protected value?: string) {
   }
-  abstract response(target: Function): string 
+  abstract response(target: Function): string
 }
 class CreateMessageEvent extends BaseReceiveEvent{
   response(target: Function) {
@@ -105,7 +96,7 @@ let broadcast = (message: string): void => {
 wss.on('connection', (ws) => {
 
   // create random user name
-  let random_username = Math.random().toString(36).substring(7) 
+  let random_username = Math.random().toString(36).substring(7)
 
   let user: IUser = {
     name: random_username
