@@ -6,12 +6,13 @@
   "scripts": {
     "compile:ts": "tsc",
     "build:frontend": "cd ui && webpack",
+    "build:server": "tsc",
     "watch:frontend": "cd ui && webpack-dev-server -d",
     "open-browser": "node -e 'setTimeout(function(){require(`open`)(`http://localhost:23000/webpack-dev-server/`)}, 2000)'",
     "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
     "start": "npm-run-all --parallel start:server start:frontend",
-    "deploy": "NODE_ENV=production npm-run-all build:frontend start:server",
+    "deploy": "NODE_ENV=production npm-run-all --parallel build:frontend build:server",
     "pretest": "npm run compile:ts",
     "test": "mocha lib/test"
   },
