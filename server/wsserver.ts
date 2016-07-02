@@ -3,68 +3,8 @@ import { Message, User } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { server } from "./server";
 import { ReceiveEventType, SendEventType } from "../common/eventType" 
+import { newMessage, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
 
-let connection_number = 0
-
-abstract class BaseReceiveEvent {
-  constructor(protected user: IUser, protected ev?: ReceiveEventType, protected value?: string) {
-  }
-  abstract response(target: Function): void
-}
-class CreateMessageEvent extends BaseReceiveEvent{
-  response(target: Function) {
-    if (this.value === "")
-      return
-        
-    User.findOne({
-      where: {
-        name: this.user.name
-      },
-      raw: true
-    }).then((user) => {
-      Message.create({
-        text: this.value,
-        // omg wtf...
-        userId: (<any>user)["id"]
-      })
-    })
-
-    target(newMessage(SendEventType.NEW_MESSAGE, {
-      text: this.value,
-      user: {
-        name: this.user.name
-      }
-    }))
-  }
-}
-class DeleteMessageEvent extends BaseReceiveEvent{
-  response(target: Function) {
-    Message.destroy({where: {id: this.value}})
-    return target(newMessage(SendEventType.DELETE_MESSAGE, this.value) )
-  }
-}
-class JoinEvent extends BaseReceiveEvent {
-  response(target: Function) {
-    connection_number += 1
-    return target(newMessage(SendEventType.USER_JOIN, {
-      "connections": connection_number
-    }))
-  }
-}
-class LeftEvent extends BaseReceiveEvent {
-  response(target: Function) {
-    connection_number -= 1
-    return target(newMessage(SendEventType.USER_LEAVE, {
-      "connections": connection_number
-    }))
-  }
-}
-let newMessage = (ev: SendEventType, value: any) => {
-  return JSON.stringify({
-    ev: SendEventType[ev],
-    value: value,
-  })
-}
 let wss = new Server({server})
 
 let broadcast = (message: string): void => {
@@ -88,7 +28,7 @@ wss.on('connection', (ws) => {
   User.create(user)
 
   // join event
-  new JoinEvent(user, ReceiveEventType.JOIN).response(broadcast)
+  new JoinEvent(user).response(broadcast)
 
   // ping/pong event
   let ping_count: number = 0
@@ -119,10 +59,10 @@ wss.on('connection', (ws) => {
       ping_available = false
 
       if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-        messageEvent = new CreateMessageEvent(user, ev, value)
+        messageEvent = new CreateMessageEvent(user, value)
         ping_available = true
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
-        messageEvent = new DeleteMessageEvent(user, ev, value)
+        messageEvent = new DeleteMessageEvent(user, value)
         ping_available = true
       } 
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
@@ -137,7 +77,7 @@ wss.on('connection', (ws) => {
   })
 
   let onClose = () => {
-    let event = new LeftEvent(user, ReceiveEventType.LEFT)
+    let event = new LeftEvent(user)
     try {
       event.response(broadcast)
     } catch(e) {
