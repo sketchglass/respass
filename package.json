@@ -6,7 +6,7 @@
   "scripts": {
     "compile:ts": "tsc",
     "build:frontend": "cd ui && webpack",
-    "watch:frontend": "cd ui && webpack-dev-server",
+    "watch:frontend": "cd ui && webpack-dev-server -d",
     "open-browser": "node -e 'setTimeout(function(){require(`open`)(`http://localhost:23000/webpack-dev-server/`)}, 2000)'",
     "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
