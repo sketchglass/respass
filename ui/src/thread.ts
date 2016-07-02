@@ -1,12 +1,13 @@
 import {EventEmitter} from "events";
 import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
 import {IMessage} from "../../common/data";
+const ReconnectingWebSocket: typeof WebSocket = require("ReconnectingWebSocket");
 
 const API_SERVER = `${window.location.hostname}:8080`;
 
 export
 class Thread extends EventEmitter {
-  connetion = new WebSocket(`ws://${API_SERVER}`);
+  connetion = new ReconnectingWebSocket(`ws://${API_SERVER}`);
   messages: IMessage[] = [];
   connectionCount = 0
 
