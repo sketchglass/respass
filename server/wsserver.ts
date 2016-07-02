@@ -9,10 +9,13 @@ let connection_number = 0
 abstract class BaseReceiveEvent {
   constructor(protected user: IUser, protected ev?: ReceiveEventType, protected value?: string) {
   }
-  abstract response(target: Function): string
+  abstract response(target: Function): void
 }
 class CreateMessageEvent extends BaseReceiveEvent{
   response(target: Function) {
+    if (this.value === "")
+      return
+        
     User.findOne({
       where: {
         name: this.user.name
@@ -26,7 +29,7 @@ class CreateMessageEvent extends BaseReceiveEvent{
       })
     })
 
-    return target(newMessage(SendEventType.NEW_MESSAGE, {
+    target(newMessage(SendEventType.NEW_MESSAGE, {
       text: this.value,
       user: {
         name: this.user.name
