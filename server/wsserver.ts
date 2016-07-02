@@ -69,7 +69,11 @@ let wss = new Server({server})
 
 let broadcast = (message: string): void => {
   wss.clients.forEach((client) => {
-    client.send(message)
+    try {
+      client.send(message)
+    } catch(e) {
+      console.error(e)
+    }
   })
 }
 
