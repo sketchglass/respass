@@ -6,7 +6,7 @@ import {Strategy as TwitterStrategy} from "passport-twitter";
 const cors = require("cors");
 
 import {Message, User, TwitterIntegration} from "./models";
-import {IMessage} from "../common/data";
+import {IMessage, IUser} from "../common/data";
 import path = require('path');
 
 export const server = http.createServer();
@@ -18,9 +18,9 @@ const TWITTER_CONSUMER_KEY = "Y2xEYqt27j0t0GEJ17I9xUden";
 const TWITTER_CONSUMER_SECRET = "vSomtUuL4TNkSl7dwdMerKr7xO9AfIUpHYPMZTXR5axJvAVIis";
 
 app.use(cors());
+app.use(session({secret: SESSION_SECRET}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({secret: SESSION_SECRET}));
 
 // looks  odd, but this is exact where file is.
 // (because all javascript files will be created under lib/)
@@ -72,5 +72,16 @@ passport.use(new TwitterStrategy({
 
 app.get("/auth/twitter", passport.authenticate("twitter"));
 app.get("/auth/twitter/callback", passport.authenticate("twitter", {successRedirect: '/', failureRedirect: '/'}));
+
+app.get("/user", (req, res) => {
+  if (req.user) {
+    const json: IUser = {
+      name: req.user.name
+    };
+    res.json(json);
+  } else {
+    res.json(null);
+  }
+});
 
 server.on("request", app);
