@@ -22,11 +22,12 @@ class MessageForm extends React.Component<{}, {}> {
 
   onKeyPress(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
-      const textarea = event.target as HTMLTextAreaElement;
-      console.log("sending...");
       event.preventDefault();
-      thread.newMessage(textarea.value);
-      textarea.value = "";
+      const textarea = event.target as HTMLTextAreaElement;
+      if (textarea.value !== "") {
+        thread.newMessage(textarea.value);
+        textarea.value = "";
+      }
     }
   }
 }
