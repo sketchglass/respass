@@ -11,6 +11,7 @@
     "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
     "start": "npm-run-all --parallel start:server start:frontend",
+    "deploy": "NODE_ENV=production npm-run-all build:frontend start:server",
     "pretest": "npm run compile:ts",
     "test": "mocha lib/test"
   },
