@@ -72,7 +72,7 @@ let broadcast = (message: string): void => {
     try {
       client.send(message)
     } catch(e) {
-      console.error(e)
+      // nothing to do
     }
   })
 }
