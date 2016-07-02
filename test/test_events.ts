@@ -37,4 +37,46 @@ describe("events", () => {
       })
     })
   })
+  describe("CreateMessageEvent", () => {
+    const message = "example"
+    let event = new events.CreateMessageEvent(user, message)
+    // override prepare methods for testing
+    let prepare_called: boolean
+    event.prepare = () => { prepare_called = true }
+
+    it("should call prepare", () => {
+      prepare_called = false
+      assert.equal(prepare_called, false)
+      event.response(() => {})
+      assert.equal(prepare_called, true)
+    })
+    it("returns correct message", () => {
+      event.response((val: string) => {
+        let parsed = JSON.parse(val)
+        assert.deepEqual(parsed, {
+          ev: 'NEW_MESSAGE', 
+          value: { text: message, user: { name: user.name} } 
+        })
+      })
+    })
+  })
+  describe("DeleteMessageEvent", () => {
+    let event = new events.DeleteMessageEvent(user, "1")
+    // override prepare methods for testing
+    let prepare_called: boolean
+    event.prepare = () => { prepare_called = true }
+
+    it("should call prepare", () => {
+      prepare_called = false
+      assert.equal(prepare_called, false)
+      event.response(() => {})
+      assert.equal(prepare_called, true)
+    })
+    it("returns correct message", () => {
+      event.response((val: string) => {
+        let parsed = JSON.parse(val)
+        assert.deepEqual(parsed, { ev: 'DELETE_MESSAGE', value: '1' })
+      })
+    })
+  })
 })
