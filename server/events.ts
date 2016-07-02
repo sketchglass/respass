@@ -6,16 +6,17 @@ export let connection_number = 0
 
 export
 abstract class BaseReceiveEvent {
-  constructor(protected user: IUser, protected ev?: ReceiveEventType, protected value?: string) {
+  ev: SendEventType
+  constructor(protected user: IUser, protected value?: string) {
   }
+  abstract prepare(): void
   abstract response(target: Function): void
 }
 export
 class CreateMessageEvent extends BaseReceiveEvent{
-  response(target: Function) {
-    if (this.value === "")
-      return
-        
+  ev = SendEventType.NEW_MESSAGE
+
+  prepare() {
     User.findOne({
       where: {
         name: this.user.name
@@ -28,8 +29,14 @@ class CreateMessageEvent extends BaseReceiveEvent{
         userId: (<any>user)["id"]
       })
     })
+  }
+  response(target: Function) {
+    if (this.value === "")
+      return
 
-    target(newMessage(SendEventType.NEW_MESSAGE, {
+    this.prepare()
+
+    target(newMessage(this.ev, {
       text: this.value,
       user: {
         name: this.user.name
@@ -39,25 +46,37 @@ class CreateMessageEvent extends BaseReceiveEvent{
 }
 export
 class DeleteMessageEvent extends BaseReceiveEvent{
-  response(target: Function) {
+  ev = SendEventType.DELETE_MESSAGE
+  prepare() {
     Message.destroy({where: {id: this.value}})
-    return target(newMessage(SendEventType.DELETE_MESSAGE, this.value) )
+  }
+  response(target: Function) {
+    this.prepare()
+    return target(newMessage(this.ev, this.value) )
   }
 }
 export
 class JoinEvent extends BaseReceiveEvent {
-  response(target: Function) {
+  ev = SendEventType.USER_JOIN
+  prepare() {
     connection_number += 1
-    return target(newMessage(SendEventType.USER_JOIN, {
+  }
+  response(target: Function) {
+    this.prepare()
+    return target(newMessage(this.ev, {
       "connections": connection_number
     }))
   }
 }
 export
 class LeftEvent extends BaseReceiveEvent {
-  response(target: Function) {
+  ev = SendEventType.USER_LEAVE
+  prepare() {
     connection_number -= 1
-    return target(newMessage(SendEventType.USER_LEAVE, {
+  }
+  response(target: Function) {
+    this.prepare()
+    return target(newMessage(this.ev, {
       "connections": connection_number
     }))
   }

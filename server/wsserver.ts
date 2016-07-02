@@ -28,7 +28,7 @@ wss.on('connection', (ws) => {
   User.create(user)
 
   // join event
-  new JoinEvent(user, ReceiveEventType.JOIN).response(broadcast)
+  new JoinEvent(user).response(broadcast)
 
   // ping/pong event
   let ping_count: number = 0
@@ -59,10 +59,10 @@ wss.on('connection', (ws) => {
       ping_available = false
 
       if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-        messageEvent = new CreateMessageEvent(user, ev, value)
+        messageEvent = new CreateMessageEvent(user, value)
         ping_available = true
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
-        messageEvent = new DeleteMessageEvent(user, ev, value)
+        messageEvent = new DeleteMessageEvent(user, value)
         ping_available = true
       } 
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
@@ -77,7 +77,7 @@ wss.on('connection', (ws) => {
   })
 
   let onClose = () => {
-    let event = new LeftEvent(user, ReceiveEventType.LEFT)
+    let event = new LeftEvent(user)
     try {
       event.response(broadcast)
     } catch(e) {
