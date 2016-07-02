@@ -1,17 +1,21 @@
 import {EventEmitter} from "events";
 import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
 import {IMessage} from "../../common/data";
+const ReconnectingWebSocket: typeof WebSocket = require("ReconnectingWebSocket");
 
 const API_SERVER = `${window.location.hostname}:8080`;
 
 export
 class Thread extends EventEmitter {
-  connetion = new WebSocket(`ws://${API_SERVER}`);
+  connetion = new ReconnectingWebSocket(`ws://${API_SERVER}`);
   messages: IMessage[] = [];
   connectionCount = 0
 
   constructor() {
     super();
+    this.connetion.onopen = () => {
+      this.fetchAllMessages();
+    };
     this.connetion.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
@@ -37,15 +41,13 @@ class Thread extends EventEmitter {
       } catch (error) {
         console.error(error);
       }
-    }
-    // TODO: メッセージを取りこぼさないようにする
-    this.fetchAllMessages();
+    };
   }
 
   async fetchAllMessages() {
     const response = await fetch(`http://${API_SERVER}/messages`);
     const messages: IMessage[] = await response.json();
-    this.messages.push(...messages);
+    this.messages = messages;
     this.emit("messageUpdate");
   }
 
