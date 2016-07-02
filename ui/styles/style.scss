@@ -1,6 +1,10 @@
 
 .thread {
-  margin: 20px;
+  margin: 0 auto;
+  max-width: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .messages {
@@ -16,8 +20,11 @@
 }
 
 .message-form {
-  width: 200px;
+  -webkit-appearance: none;
+  appearance: none;
   resize: none;
   outline: none;
+  border-radius: 0;
   border: 2px solid gray;
+  height: 40px;
 }
