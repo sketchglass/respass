@@ -13,6 +13,9 @@ class Thread extends EventEmitter {
 
   constructor() {
     super();
+    this.connetion.onopen = () => {
+      this.fetchAllMessages();
+    };
     this.connetion.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
@@ -38,15 +41,13 @@ class Thread extends EventEmitter {
       } catch (error) {
         console.error(error);
       }
-    }
-    // TODO: メッセージを取りこぼさないようにする
-    this.fetchAllMessages();
+    };
   }
 
   async fetchAllMessages() {
     const response = await fetch(`http://${API_SERVER}/messages`);
     const messages: IMessage[] = await response.json();
-    this.messages.push(...messages);
+    this.messages = messages;
     this.emit("messageUpdate");
   }
 
