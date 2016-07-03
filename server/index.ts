@@ -12,7 +12,7 @@ for (const model of [Message, TwitterIntegration, User]) {
   })
 }
 
-import { server } from "./server";
+import { app } from "./server";
 import "./wsserver"
 
-server.listen(8080);
+app.listen(8080);
