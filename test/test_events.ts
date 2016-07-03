@@ -10,6 +10,7 @@ let user: IUser = {
 describe("events", () => {
   describe("JoinEvent", () => {
     let event = new events.JoinEvent(user)
+    event.prepare = () => {}
     it("should increase connection_number", () => {
       assert.equal(events.connection_number, 0)
       event.response(() => {})

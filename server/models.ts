@@ -9,10 +9,16 @@ export let User = sequelize.define('user', {
   name: Sequelize.STRING,
 })
 
+export let Connection = sequelize.define('connection', {
+  available: Sequelize.BOOLEAN
+})
+
 export let TwitterIntegration = sequelize.define('twitterIntegration', {
   twitterId: Sequelize.STRING,
 })
 
+User.hasMany(Connection)
+Connection.belongsTo(User)
 User.hasMany(Message)
 Message.belongsTo(User)
 User.hasOne(TwitterIntegration)

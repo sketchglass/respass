@@ -6,7 +6,7 @@ import * as passport from "passport";
 import {Strategy as TwitterStrategy} from "passport-twitter";
 import * as cors from "cors";
 
-import {Message, User, TwitterIntegration} from "./models";
+import {Message, User, TwitterIntegration, Connection} from "./models";
 import {IMessage, IUser} from "../common/data";
 
 export const app = express();
@@ -87,6 +87,17 @@ app.get("/user", (req, res) => {
   } else {
     res.json(null);
   }
+});
+
+app.get("/connections", async (req, res) => {
+  let users: any = await User.findAll({include: [Connection]});
+  let response: IUser[] = users.filter((user: any) => {return user.connections.length !== 0}).map((user: any) => {
+    return {
+      name: user.name,
+      connecting: user.connections.length !== 0
+    };
+  });
+  res.json(response);
 });
 
 app.get("/logout", (req, res) => {
