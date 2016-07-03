@@ -90,4 +90,9 @@ app.get("/user", (req, res) => {
   }
 });
 
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect(FRONTEND_URL);
+});
+
 server.on("request", app);

@@ -27,6 +27,7 @@ class Auth extends EventEmitter {
   }
 
   signOut() {
+    location.href = `http://${API_SERVER}/logout`;
   }
 }
 
