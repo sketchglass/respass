@@ -1,5 +1,5 @@
 import { Server } from "ws"
-import { Message, User } from "./models"
+import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { server } from "./server";
 import { ReceiveEventType, SendEventType } from "../common/eventType" 
@@ -26,7 +26,21 @@ wss.on('connection', (ws) => {
     name: random_username,
     connecting: true
   }
+
+  let connection = {
+    available: true
+  }
+
   User.create(user)
+
+  let connection_id: number
+
+  // create connection
+  User.findOne({where: {name: user.name}}).then((user: any) => {
+    Connection.create({userId: user["id"], available: true}).then((connection: any) => {
+      connection_id = connection["id"]
+    })
+  })
 
   // join event
   new JoinEvent(user).response(broadcast)
@@ -81,6 +95,12 @@ wss.on('connection', (ws) => {
     let event = new LeftEvent(user)
     try {
       event.response(broadcast)
+      // destroy connection
+      Connection.destroy({
+        where: {
+          id: connection_id
+        }
+      })
     } catch(e) {
       // failed
     }
