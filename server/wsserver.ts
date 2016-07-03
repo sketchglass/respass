@@ -23,7 +23,8 @@ wss.on('connection', (ws) => {
   let random_username = Math.random().toString(36).substring(7)
 
   let user: IUser = {
-    name: random_username
+    name: random_username,
+    connecting: true
   }
   User.create(user)
 

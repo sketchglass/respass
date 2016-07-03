@@ -90,6 +90,15 @@ app.get("/user", (req, res) => {
   }
 });
 
+app.get("/connections", async (req, res) => {
+  let users: any = await User.findAll({where: {connecting: true}});
+  let response: IUser[] = users.map((user: any) => ({
+    name: user.name,
+    connecting: user.connecting,
+  }));
+  res.json(response);
+});
+
 app.get("/logout", (req, res) => {
   req.logout();
   res.redirect(FRONTEND_URL);

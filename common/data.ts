@@ -8,5 +8,6 @@ interface IMessage {
 
 export
 interface IUser {
-  name: string
+  name: string,
+  connecting?: boolean,
 }
