@@ -1,15 +1,16 @@
-import { Message, User } from "./models"
+import { Message, User, TwitterIntegration } from "./models"
+
+require('dotenv').config();
 
 let IS_PROD: boolean = process.env.NODE_ENV === "production"
 
 // define models
-Message.sync({
-  // !! breaks current db (do not use in production)
-  force: !IS_PROD
-})
-User.sync({
-  force: !IS_PROD
-})
+for (const model of [Message, TwitterIntegration, User]) {
+  model.sync({
+    // !! breaks current db (do not use in production)
+    force: !IS_PROD
+  })
+}
 
 import { server } from "./server";
 import "./wsserver"

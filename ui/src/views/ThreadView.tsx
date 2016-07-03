@@ -1,6 +1,54 @@
 import * as React from "react";
 import {thread} from "../thread";
-import {IMessage} from "../../../common/data";
+import {auth} from "../auth";
+import {IMessage, IUser} from "../../../common/data";
+
+interface UserViewState {
+  user?: IUser;
+  loggedOut?: boolean;
+}
+
+class UserView extends React.Component<{}, UserViewState> {
+  constructor() {
+    super();
+    this.state = {
+      user: null,
+      loggedOut: false
+    };
+    auth.on("change", () => {
+      this.setState({
+        user: auth.user,
+        loggedOut: auth.loggedOut
+      });
+    });
+  }
+
+  render() {
+    const {user, loggedOut} = this.state;
+
+    if (user) {
+      const signOut = () => auth.logOut();
+      return (
+        <div className="user-view">
+          <div className="name">{user.name}</div>
+          <a href="#" className="sign-out" onClick={signOut}>Log Out</a>
+        </div>
+      )
+    } else if (loggedOut) {
+      const signIn = () => auth.logIn();
+      return (
+        <div className="user-view">
+          <a href="#" className="sign-in" onClick={signIn}>Log In</a>
+        </div>
+      )
+    } else {
+      return (
+        <div className="user-view">
+        </div>
+      )
+    }
+  }
+}
 
 const MessageView = (props: {message: IMessage}) => {
   const {text, user} = props.message;
@@ -60,6 +108,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     const {messages} = this.state;
     return (
       <div className="thread">
+        <UserView />
         <div className="connections">{this.state.connectionCount}</div>
         <div className="messages">
           {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
