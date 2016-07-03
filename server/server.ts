@@ -15,7 +15,8 @@ const {
   FRONTEND_URL,
   SESSION_SECRET,
   TWITTER_CONSUMER_KEY,
-  TWITTER_CONSUMER_SECRET
+  TWITTER_CONSUMER_SECRET,
+  TWITTER_CALLBACK_URL,
 } = process.env;
 
 app.use(cors({
@@ -56,7 +57,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new TwitterStrategy({
   consumerKey: TWITTER_CONSUMER_KEY,
   consumerSecret: TWITTER_CONSUMER_SECRET,
-  callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
+  callbackURL: TWITTER_CALLBACK_URL
 }, async (token, secret, profile, done) => {
   try {
     const id = profile.id;
