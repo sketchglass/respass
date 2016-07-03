@@ -1,6 +1,6 @@
 import * as WebSocket from "ws"
 import * as express from "express";
-import { Message, User } from "./models"
+import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { app } from "./server";
 import { ReceiveEventType, SendEventType } from "../common/eventType"
@@ -23,16 +23,29 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
   let user: IUser
   if (req.user) {
     user = {
-      name: req.user.name
+      name: req.user.name,
     };
   } else {
     // anonymous
     let random_username = Math.random().toString(36).substring(7)
     user = {
-      name: random_username
+      name: random_username,
     }
     User.create(user)
   }
+
+  let connection = {
+    available: true
+  }
+
+  let connection_id: number
+
+  // create connection
+  User.findOne({where: {name: user.name}}).then((user: any) => {
+    Connection.create({userId: user["id"], available: true}).then((connection: any) => {
+      connection_id = connection["id"]
+    })
+  })
 
   // join event
   new JoinEvent(user).response(broadcast)
@@ -87,6 +100,12 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
     let event = new LeftEvent(user)
     try {
       event.response(broadcast)
+      // destroy connection
+      Connection.destroy({
+        where: {
+          id: connection_id
+        }
+      })
     } catch(e) {
       // failed
     }

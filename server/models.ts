@@ -25,6 +25,17 @@ export let User = sequelize.define<User, UserParams>('user', {
   name: Sequelize.STRING,
 })
 
+interface ConnectionParams {
+  available?: boolean;
+  userId?: number;
+}
+export interface Connection extends Sequelize.Instance<Connection, ConnectionParams>, ConnectionParams {
+}
+
+export let Connection = sequelize.define<Connection, ConnectionParams>('connection', {
+  available: Sequelize.BOOLEAN
+})
+
 interface TwitterIntegrationParams {
   twitterId?: string;
   userId?: number;
@@ -37,6 +48,8 @@ export let TwitterIntegration = sequelize.define<TwitterIntegration, TwitterInte
   twitterId: Sequelize.STRING,
 })
 
+User.hasMany(Connection)
+Connection.belongsTo(User)
 User.hasMany(Message)
 Message.belongsTo(User)
 User.hasOne(TwitterIntegration)
