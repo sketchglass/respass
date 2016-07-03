@@ -1,6 +1,46 @@
 import * as React from "react";
 import {thread} from "../thread";
-import {IMessage} from "../../../common/data";
+import {auth} from "../auth";
+import {IMessage, IUser} from "../../../common/data";
+
+interface HeaderViewState {
+  user?: IUser;
+  signedOut?: boolean;
+}
+
+class HeaderView extends React.Component<{}, HeaderViewState> {
+  constructor() {
+    super();
+    this.state = {
+      user: null,
+      signedOut: false
+    };
+    auth.on("change", () => {
+      this.setState({
+        user: auth.user,
+        signedOut: auth.signedOut
+      });
+    });
+  }
+
+  render() {
+    const {user, signedOut} = this.state;
+    const signIn = () => auth.signIn();
+    let content: JSX.Element;
+    if (user) {
+      content = <div className="user">{user.name}</div>
+    } else if (signedOut) {
+      content = <a href="#" className="signIn" onClick={signIn}>Sign In</a>
+    } else {
+      content = <div></div>
+    }
+    return (
+      <div className="header">
+        {content}
+      </div>
+    );
+  }
+}
 
 const MessageView = (props: {message: IMessage}) => {
   const {text, user} = props.message;
@@ -60,6 +100,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     const {messages} = this.state;
     return (
       <div className="thread">
+        <HeaderView />
         <div className="connections">{this.state.connectionCount}</div>
         <div className="messages">
           {messages.map((msg, i) => <MessageView key={i} message={msg} />)}

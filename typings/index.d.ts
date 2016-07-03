@@ -1,3 +1,4 @@
+/// <reference path="globals/cors/index.d.ts" />
 /// <reference path="globals/empower/index.d.ts" />
 /// <reference path="globals/express-serve-static-core/index.d.ts" />
 /// <reference path="globals/express-session/index.d.ts" />

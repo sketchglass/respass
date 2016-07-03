@@ -5,6 +5,7 @@
     "sequelize": "registry:npm/sequelize#3.0.0+20160604152601"
   },
   "globalDependencies": {
+    "cors": "registry:dt/cors#0.0.0+20160317120654",
     "empower": "registry:dt/empower#0.0.0+20160317120654",
     "express": "registry:dt/express#4.0.0+20160317120654",
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160625155614",

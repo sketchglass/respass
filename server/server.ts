@@ -4,7 +4,7 @@ import * as express from "express";
 import * as session from 'express-session';
 import * as passport from "passport";
 import {Strategy as TwitterStrategy} from "passport-twitter";
-const cors = require("cors");
+import * as cors from "cors";
 
 import {Message, User, TwitterIntegration} from "./models";
 import {IMessage, IUser} from "../common/data";
@@ -12,12 +12,17 @@ import {IMessage, IUser} from "../common/data";
 export const server = http.createServer();
 const app = express();
 
+const FRONTEND_URL = "http://127.0.0.1:23000";
+
 // TODO: hide secret in production
 const SESSION_SECRET = "de0c0de3acdf8eaffc29900d2234b808cd55b201";
 const TWITTER_CONSUMER_KEY = "Y2xEYqt27j0t0GEJ17I9xUden";
 const TWITTER_CONSUMER_SECRET = "vSomtUuL4TNkSl7dwdMerKr7xO9AfIUpHYPMZTXR5axJvAVIis";
 
-app.use(cors());
+app.use(cors({
+  origin: FRONTEND_URL,
+  credentials: true
+}));
 app.use(session({secret: SESSION_SECRET}));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -70,7 +75,6 @@ passport.use(new TwitterStrategy({
   }
 }));
 
-const FRONTEND_URL = "http://127.0.0.1:23000";
 
 app.get("/auth/twitter", passport.authenticate("twitter"));
 app.get("/auth/twitter/callback", passport.authenticate("twitter", {successRedirect: FRONTEND_URL, failureRedirect: FRONTEND_URL}));
