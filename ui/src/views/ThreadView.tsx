@@ -5,7 +5,7 @@ import {IMessage, IUser} from "../../../common/data";
 
 interface UserViewState {
   user?: IUser;
-  signedOut?: boolean;
+  loggedOut?: boolean;
 }
 
 class UserView extends React.Component<{}, UserViewState> {
@@ -13,29 +13,29 @@ class UserView extends React.Component<{}, UserViewState> {
     super();
     this.state = {
       user: null,
-      signedOut: false
+      loggedOut: false
     };
     auth.on("change", () => {
       this.setState({
         user: auth.user,
-        signedOut: auth.signedOut
+        loggedOut: auth.loggedOut
       });
     });
   }
 
   render() {
-    const {user, signedOut} = this.state;
+    const {user, loggedOut} = this.state;
 
     if (user) {
-      const signOut = () => auth.signOut();
+      const signOut = () => auth.logOut();
       return (
         <div className="user-view">
           <div className="name">{user.name}</div>
           <a href="#" className="sign-out" onClick={signOut}>Log Out</a>
         </div>
       )
-    } else if (signedOut) {
-      const signIn = () => auth.signIn();
+    } else if (loggedOut) {
+      const signIn = () => auth.logIn();
       return (
         <div className="user-view">
           <a href="#" className="sign-in" onClick={signIn}>Log In</a>

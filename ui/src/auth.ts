@@ -4,7 +4,7 @@ import {IUser} from "../../common/data";
 
 class Auth extends EventEmitter {
   user: IUser;
-  signedOut = false;
+  loggedOut = false;
 
   constructor() {
     super();
@@ -17,16 +17,16 @@ class Auth extends EventEmitter {
     });
     this.user = await req.json();
     if (!this.user) {
-      this.signedOut = true;
+      this.loggedOut = true;
     }
     this.emit("change");
   }
 
-  signIn() {
+  logIn() {
     location.href = `http://${API_SERVER}/auth/twitter`;
   }
 
-  signOut() {
+  logOut() {
     location.href = `http://${API_SERVER}/logout`;
   }
 }
