@@ -1,6 +1,6 @@
 import {EventEmitter} from "events";
 import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
-import {IMessage} from "../../common/data";
+import {IMessage, IUser} from "../../common/data";
 import {API_SERVER} from "./config";
 const ReconnectingWebSocket: typeof WebSocket = require("ReconnectingWebSocket");
 
@@ -8,7 +8,8 @@ export
 class Thread extends EventEmitter {
   connetion = new ReconnectingWebSocket(`ws://${API_SERVER}`);
   messages: IMessage[] = [];
-  connectionCount = 0
+  connectionCount = 0;
+  availableUsers: IUser[] = [];
 
   constructor() {
     super();
@@ -29,7 +30,7 @@ class Thread extends EventEmitter {
         case "USER_LEAVE":
           const connectionCount = message.value.connections
           this.connectionCount = connectionCount
-          this.emit("connectionUpdate")
+          this.fetchAvailableUsers()
           break;
         case "PING":
           const pingId: number = message.value
@@ -41,6 +42,13 @@ class Thread extends EventEmitter {
         console.error(error);
       }
     };
+  }
+
+  async fetchAvailableUsers() {
+    const response = await fetch(`http://${API_SERVER}/connections`);
+    const availableUsers: IUser[] = await response.json();
+    this.availableUsers = availableUsers;
+    this.emit("connectionUpdate");
   }
 
   async fetchAllMessages() {

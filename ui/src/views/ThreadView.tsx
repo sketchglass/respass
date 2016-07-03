@@ -3,6 +3,37 @@ import {thread} from "../thread";
 import {auth} from "../auth";
 import {IMessage, IUser} from "../../../common/data";
 
+interface UserListState {
+  users: IUser[];
+}
+
+class UserList extends React.Component<{}, UserListState> {
+  constructor() {
+    super();
+    this.state = {
+      users: []
+    };
+    thread.on("connectionUpdate", () => {
+      this.setState({
+        users: thread.availableUsers
+      });
+      console.log(thread.availableUsers);
+    });
+  }
+
+  render() {
+    const {users} = this.state;
+    return (
+      <div className="user-list">
+        <div>Available users:</div>
+        <ul>
+          {users.map((user)=><li>{user.name}</li>)}
+        </ul>
+      </div>
+    );
+  }
+}
+
 interface UserViewState {
   user?: IUser;
   loggedOut?: boolean;
@@ -109,6 +140,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     return (
       <div className="thread">
         <UserView />
+        <UserList />
         <div className="connections">{this.state.connectionCount}</div>
         <div className="messages">
           {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
