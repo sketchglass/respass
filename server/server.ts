@@ -1,4 +1,5 @@
 import * as http from "http";
+import * as path from 'path';
 import * as express from "express";
 import * as session from 'express-session';
 import * as passport from "passport";
@@ -7,7 +8,6 @@ const cors = require("cors");
 
 import {Message, User, TwitterIntegration} from "./models";
 import {IMessage, IUser} from "../common/data";
-import path = require('path');
 
 export const server = http.createServer();
 const app = express();
