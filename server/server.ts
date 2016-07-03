@@ -31,13 +31,13 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, '../../ui/dist')));
 
 app.get("/messages", async (req, res) => {
-  const messages: any[] = await Message.findAll({
+  const messages = await Message.findAll({
     include: [User],
     //order: "createdAt", <- this doesn't work ???
   });
   const data: IMessage[] = messages.map(m => ({
     text: m.text,
-    user: {name: m.user.name}
+    user: {name: m["user"].name}
   }));
   res.json(data);
 });
@@ -61,7 +61,7 @@ passport.use(new TwitterStrategy({
   try {
     const id = profile.id;
     let integration = await TwitterIntegration.findOne({where: {twitterId: id}});
-    let user: any; // workaround
+    let user: User;
     if (integration) {
       user = await User.findById(integration["userId"]);
     } else {
