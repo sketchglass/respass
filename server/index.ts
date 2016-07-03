@@ -1,5 +1,7 @@
 import { Message, User, TwitterIntegration } from "./models"
 
+require('dotenv').config();
+
 let IS_PROD: boolean = process.env.NODE_ENV === "production"
 
 // define models

@@ -12,12 +12,12 @@ import {IMessage, IUser} from "../common/data";
 export const server = http.createServer();
 const app = express();
 
-const FRONTEND_URL = "http://127.0.0.1:23000";
-
-// TODO: hide secret in production
-const SESSION_SECRET = "de0c0de3acdf8eaffc29900d2234b808cd55b201";
-const TWITTER_CONSUMER_KEY = "Y2xEYqt27j0t0GEJ17I9xUden";
-const TWITTER_CONSUMER_SECRET = "vSomtUuL4TNkSl7dwdMerKr7xO9AfIUpHYPMZTXR5axJvAVIis";
+const {
+  FRONTEND_URL,
+  SESSION_SECRET,
+  TWITTER_CONSUMER_KEY,
+  TWITTER_CONSUMER_SECRET
+} = process.env;
 
 app.use(cors({
   origin: FRONTEND_URL,
