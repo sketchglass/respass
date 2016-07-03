@@ -1,4 +1,4 @@
-import { ReceiveEventType, SendEventType } from "../common/eventType" 
+import { ReceiveEventType, SendEventType } from "../common/eventType"
 import { IMessage, IUser } from "../common/data";
 import { Message, User } from "./models"
 
@@ -25,8 +25,7 @@ class CreateMessageEvent extends BaseReceiveEvent{
     }).then((user) => {
       Message.create({
         text: this.value,
-        // omg wtf...
-        userId: (<any>user)["id"]
+        userId: user.id
       })
     })
   }
