@@ -91,9 +91,7 @@ app.get("/user", (req, res) => {
 
 app.get("/connections", async (req, res) => {
   let users: any = await User.findAll({include: [Connection]});
-  let response: IUser[] = users.map((user: any) => {
-    if (user.connections.length === 0)
-      return;
+  let response: IUser[] = users.filter((user: any) => {return user.connections.length !== 0}).map((user: any) => {
     return {
       name: user.name,
       connecting: user.connections.length !== 0
