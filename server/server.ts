@@ -9,8 +9,7 @@ import * as cors from "cors";
 import {Message, User, TwitterIntegration} from "./models";
 import {IMessage, IUser} from "../common/data";
 
-export const server = http.createServer();
-const app = express();
+export const app = express();
 
 const {
   FRONTEND_URL,
@@ -94,5 +93,3 @@ app.get("/logout", (req, res) => {
   req.logout();
   res.redirect(FRONTEND_URL);
 });
-
-server.on("request", app);
