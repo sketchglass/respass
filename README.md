@@ -4,6 +4,7 @@
 
 ```
 cp .env.sample .env
+typings install
 npm install
 npm start
 ```
