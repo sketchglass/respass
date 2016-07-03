@@ -21,12 +21,10 @@ class CreateMessageEvent extends BaseReceiveEvent{
       where: {
         name: this.user.name
       },
-      raw: true
-    }).then((user) => {
+    }).then((user: any) => {
       Message.create({
         text: this.value,
-        // omg wtf...
-        userId: (<any>user)["id"]
+        userId: user["id"]
       })
     })
   }
@@ -59,10 +57,18 @@ export
 class JoinEvent extends BaseReceiveEvent {
   ev = SendEventType.USER_JOIN
   prepare() {
-    connection_number += 1
+    User.findOne({
+      where: {
+        name: this.user.name
+      },
+    }).then((user: any) => {
+      user.connecting = true
+      user.save()
+    })
   }
   response(target: Function) {
     this.prepare()
+    connection_number += 1
     return target(newMessage(this.ev, {
       "connections": connection_number
     }))
@@ -72,10 +78,18 @@ export
 class LeftEvent extends BaseReceiveEvent {
   ev = SendEventType.USER_LEAVE
   prepare() {
-    connection_number -= 1
+    User.findOne({
+      where: {
+        name: this.user.name
+      },
+    }).then((user: any) => {
+      user.connecting = false
+      user.save()
+    })
   }
   response(target: Function) {
     this.prepare()
+    connection_number -= 1
     return target(newMessage(this.ev, {
       "connections": connection_number
     }))

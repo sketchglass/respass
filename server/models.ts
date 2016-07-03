@@ -7,6 +7,7 @@ export let Message = sequelize.define('message', {
 
 export let User = sequelize.define('user', {
   name: Sequelize.STRING,
+  connecting: Sequelize.BOOLEAN,
 })
 
 export let TwitterIntegration = sequelize.define('twitterIntegration', {
