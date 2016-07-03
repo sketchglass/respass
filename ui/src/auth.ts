@@ -25,6 +25,9 @@ class Auth extends EventEmitter {
   signIn() {
     location.href = `http://${API_SERVER}/auth/twitter`;
   }
+
+  signOut() {
+  }
 }
 
 export const auth = new Auth();

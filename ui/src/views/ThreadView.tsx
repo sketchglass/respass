@@ -3,12 +3,12 @@ import {thread} from "../thread";
 import {auth} from "../auth";
 import {IMessage, IUser} from "../../../common/data";
 
-interface HeaderViewState {
+interface UserViewState {
   user?: IUser;
   signedOut?: boolean;
 }
 
-class HeaderView extends React.Component<{}, HeaderViewState> {
+class UserView extends React.Component<{}, UserViewState> {
   constructor() {
     super();
     this.state = {
@@ -25,20 +25,28 @@ class HeaderView extends React.Component<{}, HeaderViewState> {
 
   render() {
     const {user, signedOut} = this.state;
-    const signIn = () => auth.signIn();
-    let content: JSX.Element;
+
     if (user) {
-      content = <div className="user">{user.name}</div>
+      const signOut = () => auth.signOut();
+      return (
+        <div className="user-view">
+          <div className="name">{user.name}</div>
+          <a href="#" className="sign-out" onClick={signOut}>Log Out</a>
+        </div>
+      )
     } else if (signedOut) {
-      content = <a href="#" className="signIn" onClick={signIn}>Sign In</a>
+      const signIn = () => auth.signIn();
+      return (
+        <div className="user-view">
+          <a href="#" className="sign-in" onClick={signIn}>Log In</a>
+        </div>
+      )
     } else {
-      content = <div></div>
+      return (
+        <div className="user-view">
+        </div>
+      )
     }
-    return (
-      <div className="header">
-        {content}
-      </div>
-    );
   }
 }
 
@@ -100,7 +108,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     const {messages} = this.state;
     return (
       <div className="thread">
-        <HeaderView />
+        <UserView />
         <div className="connections">{this.state.connectionCount}</div>
         <div className="messages">
           {messages.map((msg, i) => <MessageView key={i} message={msg} />)}

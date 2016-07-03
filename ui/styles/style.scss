@@ -28,3 +28,14 @@
   border: 2px solid gray;
   height: 40px;
 }
+
+.user-view {
+  height: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+
+  .name {
+    flex: 1;
+  }
+}
