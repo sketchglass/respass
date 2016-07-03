@@ -70,7 +70,7 @@ passport.use(new TwitterStrategy({
   }
 }));
 
-const FRONTEND_URL = "http://127.0.0.1:23000/webpack-dev-server/";
+const FRONTEND_URL = "http://127.0.0.1:23000";
 
 app.get("/auth/twitter", passport.authenticate("twitter"));
 app.get("/auth/twitter/callback", passport.authenticate("twitter", {successRedirect: FRONTEND_URL, failureRedirect: FRONTEND_URL}));
