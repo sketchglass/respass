@@ -1,11 +1,13 @@
-import { Server } from "ws"
+import * as WebSocket from "ws"
+import * as express from "express";
 import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
-import { server } from "./server";
-import { ReceiveEventType, SendEventType } from "../common/eventType" 
+import { app } from "./server";
+import { ReceiveEventType, SendEventType } from "../common/eventType"
 import { newMessage, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
 
-let wss = new Server({server})
+const expressWs = require('express-ws')(app);
+const wss: WebSocket.Server = expressWs.getWss();
 
 let broadcast = (message: string): void => {
   wss.clients.forEach((client) => {
@@ -17,21 +19,24 @@ let broadcast = (message: string): void => {
   })
 }
 
-wss.on('connection', (ws) => {
-
-  // create random user name
-  let random_username = Math.random().toString(36).substring(7)
-
-  let user: IUser = {
-    name: random_username,
-    connecting: true
+app["ws"]("/", (ws: WebSocket, req: express.Request) => {
+  let user: IUser
+  if (req.user) {
+    user = {
+      name: req.user.name,
+    };
+  } else {
+    // anonymous
+    let random_username = Math.random().toString(36).substring(7)
+    user = {
+      name: random_username,
+    }
+    User.create(user)
   }
 
   let connection = {
     available: true
   }
-
-  User.create(user)
 
   let connection_id: number
 
@@ -48,7 +53,7 @@ wss.on('connection', (ws) => {
   // ping/pong event
   let ping_count: number = 0
   let ping_available: boolean = false
-  
+
   setInterval(() => {
     try {
       if (ws.readyState == ws.OPEN) {
@@ -79,7 +84,7 @@ wss.on('connection', (ws) => {
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
         messageEvent = new DeleteMessageEvent(user, value)
         ping_available = true
-      } 
+      }
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
         if (++value == ping_count) {
           ping_available = true
@@ -105,5 +110,5 @@ wss.on('connection', (ws) => {
       // failed
     }
   }
-  ws.on('close', onClose) 
+  ws.on('close', onClose)
 })
