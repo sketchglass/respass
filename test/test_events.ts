@@ -25,6 +25,7 @@ describe("events", () => {
   })
   describe("LeftEvent", () => {
     let event = new events.LeftEvent(user)
+    event.prepare = () => {}
     it("should decrease connection_number", () => {
       events.connection_number = 1
       assert.equal(events.connection_number, 1)
