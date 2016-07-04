@@ -1,15 +1,10 @@
-import * as http from "http";
-import * as path from 'path';
-import * as express from "express";
 import * as session from 'express-session';
 import * as passport from "passport";
 import {Strategy as TwitterStrategy} from "passport-twitter";
 import * as cors from "cors";
 
 import {Message, User, TwitterIntegration, Connection} from "./models";
-import {IMessage, IUser} from "../common/data";
-
-export const app = express();
+import {app} from "./app"
 
 const {
   FRONTEND_URL,
@@ -26,22 +21,6 @@ app.use(cors({
 app.use(session({secret: SESSION_SECRET}));
 app.use(passport.initialize());
 app.use(passport.session());
-
-// looks  odd, but this is exact where file is.
-// (because all javascript files will be created under lib/)
-app.use(express.static(path.join(__dirname, '../../ui/dist')));
-
-app.get("/messages", async (req, res) => {
-  const messages = await Message.findAll({
-    include: [User],
-    //order: "createdAt", <- this doesn't work ???
-  });
-  const data: IMessage[] = messages.map(m => ({
-    text: m.text,
-    user: {name: m.user.name}
-  }));
-  res.json(data);
-});
 
 passport.serializeUser((user, done) => {
   done(null, user.id)
@@ -75,31 +54,8 @@ passport.use(new TwitterStrategy({
   }
 }));
 
-
 app.get("/auth/twitter", passport.authenticate("twitter"));
 app.get("/auth/twitter/callback", passport.authenticate("twitter", {successRedirect: FRONTEND_URL, failureRedirect: FRONTEND_URL}));
-
-app.get("/user", (req, res) => {
-  if (req.user) {
-    const json: IUser = {
-      name: req.user.name
-    };
-    res.json(json);
-  } else {
-    res.json(null);
-  }
-});
-
-app.get("/connections", async (req, res) => {
-  let users = await User.findAll({include: [Connection]});
-  let response: IUser[] = users.filter(user => user.connections.length !== 0).map(user => {
-    return {
-      name: user.name,
-      connecting: user.connections.length !== 0
-    };
-  });
-  res.json(response);
-});
 
 app.get("/logout", (req, res) => {
   req.logout();
