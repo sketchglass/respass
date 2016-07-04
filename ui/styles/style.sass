@@ -45,10 +45,9 @@ body
   max-width: 800px
   display: flex
   padding: 20px
-  flex-wrap: wrap
   .user-list
     min-width: 200px
-  
+
   .messages-container
     flex: 1
     display: flex
@@ -70,3 +69,6 @@ body
       height: 40px
       &:hover
         border: 2px solid darken($color-message-form-border, 20%)
+@media (max-width: 500px)
+  .thread-container
+    flex-direction: column
