@@ -17,7 +17,6 @@ class UserList extends React.Component<{}, UserListState> {
       this.setState({
         users: thread.availableUsers
       });
-      console.log(thread.availableUsers);
     });
   }
 
@@ -27,7 +26,7 @@ class UserList extends React.Component<{}, UserListState> {
       <div className="user-list">
         <div>Available users:</div>
         <ul>
-          {users.map((user)=><li>{user.name}</li>)}
+          {users.map((user, i)=><li key={i}>{user.name}</li>)}
         </ul>
       </div>
     );
@@ -111,6 +110,15 @@ class MessageForm extends React.Component<{}, {}> {
   }
 }
 
+
+const HeaderView = () => {
+  return <div className="header">
+    <div className="app-name">respass</div>
+    <UserView />
+  </div>
+}
+
+
 interface ThreadViewState {
   messages?: IMessage[],
   connectionCount?: number;
@@ -139,13 +147,16 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     const {messages} = this.state;
     return (
       <div className="thread">
-        <UserView />
-        <UserList />
-        <div className="connections">{this.state.connectionCount}</div>
-        <div className="messages">
-          {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
+        <HeaderView />
+        <div className="thread-container">
+          <UserList />
+          <div className="messages-container">
+            <div className="messages">
+              {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
+            </div>
+            <MessageForm />
+          </div>
         </div>
-        <MessageForm />
       </div>
     );
   }
