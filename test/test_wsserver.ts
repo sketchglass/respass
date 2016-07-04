@@ -32,6 +32,27 @@ describe("wsserver", () => {
       done()
     })
   })
+  it("did not close connection when ping event is successfully received", function (done)  {
+    this.timeout(10 * 1000)
+    let ping_times = 0
+
+    ws.on('message', (data) => {
+      const {ev, value} = JSON.parse(data)
+      switch(ev) {
+        case "PING":
+          const pong = {
+            "ev": "PONG",
+            "value": value
+          }
+          ws.send(JSON.stringify(pong))
+          ping_times++
+          break
+      }
+      if (ping_times > 1) {
+        done()
+      }
+    })
+  })
         
 })
 
