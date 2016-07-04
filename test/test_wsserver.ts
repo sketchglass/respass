@@ -1,17 +1,12 @@
 import {app} from "../server/app"
 import * as WebSocket from "ws"
-// import * as http from "http"
 
-// wip
-//
-// import "../server/wsserver"
-// let server = http.createServer(app);
-// server.listen(0);
-// const port = server.address().port
-
-const port = 8328
+let port: number
 import "../server/wsserver"
-app.listen(port)
+app.listen(0, null, null, function() { 
+  port = this.address().port
+})
+
 describe("wsserver", () => {
 
   let ws: WebSocket
