@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 import * as request from "supertest"
 import {app} from "../server/app"
 import "../server/api"
