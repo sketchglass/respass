@@ -2,7 +2,7 @@ import * as WebSocket from "ws"
 import * as express from "express";
 import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
-import { app } from "./server";
+import { app } from "./app";
 import { ReceiveEventType, SendEventType } from "../common/eventType"
 import { newMessage, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
 

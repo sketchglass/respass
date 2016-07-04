@@ -1,7 +1,8 @@
 require('dotenv').config()
 
 import * as request from "supertest"
-import {app} from "../server/server"
+import {app} from "../server/app"
+import "../server/api"
 import {Message, User} from "../server/models"
 import {IMessage} from "../common/data"
 
