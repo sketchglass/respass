@@ -5,11 +5,11 @@ import {Message, User, Connection} from "../server/models"
 import {IMessage, IUser} from "../common/data"
 
 describe("server", () => {
-  for (const model of [Message, User, Connection]) {
-    model.sync({force: true})
-  }
 
-  before(async (done) => {
+  beforeEach(async (done) => {
+    for (const model of [Message, User, Connection]) {
+      await model.sync({force: true})
+    }
     try {
       const user1 = await User.create({name: "alice"})
       const user2 = await User.create({name: "bob"})
@@ -25,6 +25,7 @@ describe("server", () => {
       done(e)
     }
   });
+  
 
   describe("/messages", () => {
 
