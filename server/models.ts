@@ -8,6 +8,7 @@ interface MessageParams {
   id?: number;
 }
 export interface Message extends Sequelize.Instance<Message, MessageParams>, MessageParams {
+  user?: User;
 }
 
 export let Message = sequelize.define<Message, {}>('message', {
@@ -19,6 +20,9 @@ interface UserParams {
   id?: number;
 }
 export interface User extends Sequelize.Instance<User, UserParams>, UserParams {
+  messages?: Message[];
+  connections?: Connection[];
+  twitterIntegration?: TwitterIntegration;
 }
 
 export let User = sequelize.define<User, UserParams>('user', {
@@ -30,6 +34,7 @@ interface ConnectionParams {
   userId?: number;
 }
 export interface Connection extends Sequelize.Instance<Connection, ConnectionParams>, ConnectionParams {
+  user?: User;
 }
 
 export let Connection = sequelize.define<Connection, ConnectionParams>('connection', {
@@ -42,6 +47,7 @@ interface TwitterIntegrationParams {
   id?: number;
 }
 export interface TwitterIntegration extends Sequelize.Instance<TwitterIntegration, TwitterIntegrationParams>, TwitterIntegrationParams {
+  user?: User;
 }
 
 export let TwitterIntegration = sequelize.define<TwitterIntegration, TwitterIntegrationParams>('twitterIntegration', {

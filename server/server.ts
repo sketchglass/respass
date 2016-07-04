@@ -38,7 +38,7 @@ app.get("/messages", async (req, res) => {
   });
   const data: IMessage[] = messages.map(m => ({
     text: m.text,
-    user: {name: m["user"].name}
+    user: {name: m.user.name}
   }));
   res.json(data);
 });
@@ -64,7 +64,7 @@ passport.use(new TwitterStrategy({
     let integration = await TwitterIntegration.findOne({where: {twitterId: id}});
     let user: User;
     if (integration) {
-      user = await User.findById(integration["userId"]);
+      user = await User.findById(integration.userId);
     } else {
       user = await User.create({name: profile.username});
       integration = await TwitterIntegration.create({twitterId: id, userId: user.id});
@@ -91,8 +91,8 @@ app.get("/user", (req, res) => {
 });
 
 app.get("/connections", async (req, res) => {
-  let users: any = await User.findAll({include: [Connection]});
-  let response: IUser[] = users.filter((user: any) => {return user.connections.length !== 0}).map((user: any) => {
+  let users = await User.findAll({include: [Connection]});
+  let response: IUser[] = users.filter(user => user.connections.length !== 0).map(user => {
     return {
       name: user.name,
       connecting: user.connections.length !== 0
