@@ -18,7 +18,7 @@
     "start": "npm-run-all --parallel start:*",
     "deploy": "NODE_ENV=production npm-run-all prepare build",
     "pretest": "npm run compile:ts",
-    "test": "mocha lib/test"
+    "test": "NODE_ENV=test mocha lib/test"
   },
   "author": "minamorl",
   "license": "ISC",
@@ -34,6 +34,7 @@
     "power-assert": "^1.4.1",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
+    "supertest": "^1.2.0",
     "ts-loader": "^0.8.2",
     "typescript": "^1.8.10",
     "webpack": "^1.13.1",

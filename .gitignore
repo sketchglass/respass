@@ -41,6 +41,7 @@ jspm_packages
 .node_repl_history
 
 /sample.db
+/test.db
 /lib
 /typings
 /.env
