@@ -24,6 +24,14 @@ describe("wsserver", () => {
       done()
     })
   })
+  it("closes automatically when pong event is not received", function (done)  {
+    this.timeout(10 * 1000)
+    ws.on('open', () => {
+    })
+    ws.on('close', (data) => {
+      done()
+    })
+  })
         
 })
 
