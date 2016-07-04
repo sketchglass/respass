@@ -1,5 +1,5 @@
 import 'normalize.css/normalize.css'
-import "../styles/style.scss";
+import "../styles/style.sass";
 
 import 'babel-polyfill';
 import 'whatwg-fetch';

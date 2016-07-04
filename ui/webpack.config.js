@@ -18,7 +18,7 @@ module.exports = {
         loader: "babel-loader?presets[]=es2015!ts-loader",
       },
       {
-        test: /\.scss$/,
+        test: /\.(scss|sass)$/,
         loader: "style-loader!css-loader!sass-loader"
       },
       {

@@ -111,6 +111,15 @@ class MessageForm extends React.Component<{}, {}> {
   }
 }
 
+
+const HeaderView = () => {
+  return <div className="header">
+    <div className="app-name">respass</div>
+    <UserView />
+  </div>
+}
+
+
 interface ThreadViewState {
   messages?: IMessage[],
   connectionCount?: number;
@@ -139,13 +148,15 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     const {messages} = this.state;
     return (
       <div className="thread">
-        <UserView />
-        <UserList />
-        <div className="connections">{this.state.connectionCount}</div>
-        <div className="messages">
-          {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
+        <HeaderView />
+        <div className="thread-container">
+          <UserList />
+          <div className="connections">{this.state.connectionCount}</div>
+          <div className="messages">
+            {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
+          </div>
+          <MessageForm />
         </div>
-        <MessageForm />
       </div>
     );
   }
