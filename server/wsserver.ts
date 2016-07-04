@@ -54,20 +54,24 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
   let ping_count: number = 0
   let ping_available: boolean = false
 
-  setInterval(() => {
+  let interval = setInterval(() => {
     try {
       if (ws.readyState == ws.OPEN) {
         ws.send(newMessage(SendEventType.PING, ping_count++))
+        ping_available = false
         setTimeout(() => {
           if(ping_available === false) {
+            console.error("ping is not available")
             ws.close()
+            clearInterval(interval)
+            return
           }
-        } ,10000)
+        } ,4000)
       }
     } catch (e) {
       console.log(e)
     }
-  },2000)
+  },4000)
 
 
 
@@ -76,14 +80,11 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
       let json = JSON.parse(undecoded_json)
       let {ev, value} = json
       let messageEvent: BaseReceiveEvent
-      ping_available = false
 
       if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
         messageEvent = new CreateMessageEvent(user, value)
-        ping_available = true
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
         messageEvent = new DeleteMessageEvent(user, value)
-        ping_available = true
       }
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
         if (++value == ping_count) {
