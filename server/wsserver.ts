@@ -40,12 +40,22 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
 
   let connection_id: number
 
-  // create connection
-  User.findOne({where: {name: user.name}}).then((user: any) => {
-    Connection.create({userId: user["id"], available: true}).then((connection: any) => {
-      connection_id = connection["id"]
+  let create_connection = () => {
+    User.findOne({where: {name: user.name}}).then((user: any) => {
+      Connection.create({userId: user["id"], available: true}).then((connection: any) => {
+        connection_id = connection["id"]
+      })
     })
-  })
+  }
+  let destroy_connection = () => {
+    Connection.destroy({
+      where: {
+        id: connection_id
+      }
+    })
+  }
+  create_connection()
+
 
   // join event
   new JoinEvent(user).response(broadcast)
@@ -58,19 +68,19 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
     try {
       if (ws.readyState == ws.OPEN) {
         ws.send(newMessage(SendEventType.PING, ping_count++))
-        ping_available = false
-        setTimeout(() => {
-          if(ping_available === false) {
-            console.error("ping is not available")
-            ws.close()
-            clearInterval(interval)
-            return
-          }
-        } ,4000)
       }
     } catch (e) {
       console.log(e)
     }
+    ping_available = false
+    setTimeout(() => {
+      if(ping_available === false) {
+        console.error("ping is not available")
+        ws.close()
+        clearInterval(interval)
+        return
+      }
+    } ,4000)
   },4000)
 
 
@@ -102,11 +112,7 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
     try {
       event.response(broadcast)
       // destroy connection
-      Connection.destroy({
-        where: {
-          id: connection_id
-        }
-      })
+      destroy_connection()
     } catch(e) {
       // failed
     }
