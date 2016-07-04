@@ -1,13 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:700)
 
-;$color-message-user: #242424
+$color-message-user: #242424
 $color-message-form-border: #cccccc
 $color-header-background: #525282
 $color-header: #ffffff
 
 body
   font-family: -apple-system, ‘Helvetica Neue’, ‘Hiragino Kaku Gothic ProN’, ‘メイリオ’, meiryo, sans-serif
-
 
 .header
   height: 50px
@@ -19,7 +18,6 @@ body
     padding-left: 10px
     padding-right: 10px
   .app-name
-    // color: $color-app-name
     font-family: Raleway
     padding-top: 4px
     font-size: 22px
@@ -34,31 +32,41 @@ body
       &:hover
         color: darken($color-header, 15%)
 
+.user-list
+  div:first-child
+    font-weight: bold
+  ul
+    padding: 0
+    margin: 0 0 20px 0
+    li
+      list-style: none
 .thread-container
   margin: 0 auto
-  max-width: 400px
+  max-width: 800px
   display: flex
-  flex-direction: column
   padding: 20px
-
-  .messages
-    margin-bottom: 10px
-
-  .message
-    margin: 10px 0
-
-    .user
-      color: $color-message-user
-      font-weight: bold
-
-  .message-form
-    -webkit-appearance: none
-    appearance: none
-    resize: none
-    outline: none
-    border-radius: 2px
-    border: 2px solid $color-message-form-border
-    height: 40px
-
-    &:hover
-      border: 2px solid darken($color-message-form-border, 20%)
+  flex-wrap: wrap
+  .user-list
+    min-width: 200px
+  
+  .messages-container
+    flex: 1
+    display: flex
+    flex-direction: column
+    .messages
+      margin-bottom: 10px
+      .message
+        margin: 10px 0
+        .user
+          color: $color-message-user
+          font-weight: bold
+    .message-form
+      -webkit-appearance: none
+      appearance: none
+      resize: none
+      outline: none
+      border-radius: 2px
+      border: 2px solid $color-message-form-border
+      height: 40px
+      &:hover
+        border: 2px solid darken($color-message-form-border, 20%)
