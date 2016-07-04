@@ -1,20 +1,25 @@
 import * as request from "supertest"
 import {app} from "../server/app"
 import "../server/api"
-import {Message, User} from "../server/models"
-import {IMessage} from "../common/data"
+import {Message, User, Connection} from "../server/models"
+import {IMessage, IUser} from "../common/data"
 
 describe("server", () => {
-  for (const model of [Message, User]) {
+  for (const model of [Message, User, Connection]) {
     model.sync({force: true})
   }
 
   before(async (done) => {
     try {
-      const user = await User.create({name: "nyan"})
-      await Message.create({text: "foo", userId: user.id})
-      await Message.create({text: "bar", userId: user.id})
-      await Message.create({text: "baz", userId: user.id})
+      const user1 = await User.create({name: "alice"})
+      const user2 = await User.create({name: "bob"})
+      const user3 = await User.create({name: "carol"})
+      await Message.create({text: "foo", userId: user1.id})
+      await Message.create({text: "bar", userId: user1.id})
+      await Message.create({text: "baz", userId: user2.id})
+      await Connection.create({userId: user1.id})
+      await Connection.create({userId: user1.id})
+      await Connection.create({userId: user2.id})
       done()
     } catch (e) {
       done(e)
@@ -25,12 +30,24 @@ describe("server", () => {
 
     it("returns all messages", done => {
       const expected: IMessage[] = [
-        {text: "foo", user: {name: "nyan"}},
-        {text: "bar", user: {name: "nyan"}},
-        {text: "baz", user: {name: "nyan"}},
+        {text: "foo", user: {name: "alice"}},
+        {text: "bar", user: {name: "alice"}},
+        {text: "baz", user: {name: "bob"}},
       ]
       request(app)
         .get("/messages")
+        .expect(200, JSON.stringify(expected), done)
+    })
+  })
+
+  describe("/connections", () => {
+    it("returns all connections without duplicate", done => {
+      const expected: IUser[] = [
+        {name: "alice", connecting: true},
+        {name: "bob", connecting: true},
+      ]
+      request(app)
+        .get("/connections")
         .expect(200, JSON.stringify(expected), done)
     })
   })
