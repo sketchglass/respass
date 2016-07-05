@@ -81,10 +81,11 @@ class UserView extends React.Component<{}, UserViewState> {
 }
 
 const MessageView = (props: {message: IMessage}) => {
-  const {text, user} = props.message;
+  const {text, user, createdAt} = props.message;
   return (
     <div className="message">
       <div className="user">{user.name}</div>
+      <div className="time">{createdAt}</div>
       <div className="text">{text}</div>
     </div>
   );

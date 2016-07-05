@@ -4,6 +4,7 @@ interface IMessage {
   user: {
     name: string;
   };
+  createdAt: string;
 }
 
 export
