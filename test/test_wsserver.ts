@@ -76,7 +76,6 @@ describe("wsserver", () => {
     this.timeout(2 * 1000)
     ws2.on('message', (data) => {
       const {ev, value} = JSON.parse(data)
-      console.log(ev)
       if (ev === "USER_JOIN") {
         ws1.close()
       }
