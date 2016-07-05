@@ -1,4 +1,5 @@
 import Sequelize = require("sequelize")
+import {IMessage, IUser} from "../common/data"
 
 const storage = process.env.NODE_ENV === "test" ? "./test.db" : "./sample.db";
 export let sequelize = new Sequelize('sample','','',{dialect:'sqlite', storage})
@@ -7,6 +8,7 @@ interface MessageParams {
   text?: string;
   userId?: number;
   id?: number;
+  createdAt?: Date
 }
 export interface Message extends Sequelize.Instance<Message, MessageParams>, MessageParams {
   user?: User;
@@ -15,6 +17,16 @@ export interface Message extends Sequelize.Instance<Message, MessageParams>, Mes
 export let Message = sequelize.define<Message, {}>('message', {
   text: Sequelize.STRING,
 })
+
+export function messageToJSON(message: Message, user: IUser|User): IMessage {
+  return {
+    text: message.text,
+    user: {
+      name: user.name
+    },
+    createdAt: message.createdAt.toString(),
+  }
+}
 
 interface UserParams {
   name?: string;

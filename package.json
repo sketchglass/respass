@@ -49,6 +49,7 @@
     "express-session": "^1.14.0",
     "express-ws": "^2.0.0-rc.1",
     "http": "0.0.0",
+    "moment": "^2.14.1",
     "normalize.css": "^4.1.1",
     "passport": "^0.3.2",
     "passport-twitter": "^1.0.4",

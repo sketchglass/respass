@@ -11,6 +11,7 @@
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160625155614",
     "express-session": "registry:dt/express-session#0.0.0+20160331200931",
     "mocha": "registry:dt/mocha#2.2.5+20160619032855",
+    "moment-node": "registry:dt/moment-node#2.11.1+20160511043338",
     "node": "registry:dt/node#6.0.0+20160621231320",
     "passport": "registry:dt/passport#0.2.0+20160317120654",
     "passport-twitter": "registry:dt/passport-twitter#1.0.3+20160316155526",

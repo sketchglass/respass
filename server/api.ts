@@ -1,4 +1,4 @@
-import {Message, User, TwitterIntegration, Connection} from "./models";
+import {Message, User, TwitterIntegration, Connection, messageToJSON} from "./models";
 import {IMessage, IUser} from "../common/data";
 import {app} from "./app";
 
@@ -7,13 +7,9 @@ app.get("/messages", async (req, res) => {
     include: [User],
     //order: "createdAt", <- this doesn't work ???
   });
-  const data: IMessage[] = messages.map(m => ({
-    text: m.text,
-    user: {name: m.user.name}
-  }));
+  const data = messages.map(m => messageToJSON(m, m.user))
   res.json(data);
 });
-
 
 app.get("/user", (req, res) => {
   if (req.user) {

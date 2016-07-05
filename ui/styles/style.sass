@@ -1,6 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:700)
 
 $color-message-user: #242424
+$color-message-time: #8e8e8e
 $color-message-form-border: #cccccc
 $color-header-background: #525282
 $color-header: #ffffff
@@ -56,9 +57,15 @@ body
       margin-bottom: 10px
       .message
         margin: 10px 0
-        .user
-          color: $color-message-user
-          font-weight: bold
+        .info
+          .user
+            display: inline-block
+            color: $color-message-user
+            font-weight: bold
+            margin-right: 10px
+          .time
+            display: inline-block
+            color: $color-message-time
     .message-form
       -webkit-appearance: none
       appearance: none

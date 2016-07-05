@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as moment from "moment"
 import {thread} from "../thread";
 import {auth} from "../auth";
 import {IMessage, IUser} from "../../../common/data";
@@ -81,10 +82,14 @@ class UserView extends React.Component<{}, UserViewState> {
 }
 
 const MessageView = (props: {message: IMessage}) => {
-  const {text, user} = props.message;
+  const {text, user, createdAt} = props.message;
+  const time = moment(createdAt).format("MMM Do, h:mm A")
   return (
     <div className="message">
-      <div className="user">{user.name}</div>
+      <div className="info">
+        <div className="user">{user.name}</div>
+        <div className="time">{time}</div>
+      </div>
       <div className="text">{text}</div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { ReceiveEventType, SendEventType } from "../common/eventType"
 import { IMessage, IUser } from "../common/data";
-import { Message, User } from "./models"
+import { Message, User, messageToJSON } from "./models"
 
 export let connection_number = 0
 
@@ -15,6 +15,7 @@ abstract class BaseReceiveEvent {
 export
 class CreateMessageEvent extends BaseReceiveEvent{
   ev = SendEventType.NEW_MESSAGE
+  message: Message
 
   async prepare() {
     const user = await User.findOne({
@@ -22,7 +23,7 @@ class CreateMessageEvent extends BaseReceiveEvent{
         name: this.user.name
       },
     })
-    await Message.create({
+    this.message = await Message.create({
       text: this.value,
       userId: user.id
     })
@@ -33,12 +34,9 @@ class CreateMessageEvent extends BaseReceiveEvent{
 
     await this.prepare()
 
-    return newMessage(this.ev, {
-      text: this.value,
-      user: {
-        name: this.user.name
-      }
-    })
+    let message = messageToJSON(this.message, this.user)
+
+    return newMessage(this.ev, message)
   }
 }
 export
