@@ -11,34 +11,30 @@ describe("events", () => {
   describe("JoinEvent", () => {
     let event = new events.JoinEvent(user)
     event.prepare = async () => {}
-    it("should increase connection_number", async (done) => {
+    it("should increase connection_number", async () => {
       assert.equal(events.connection_number, 0)
       await event.response()
       assert.equal(events.connection_number, 1)
-      done()
     })
-    it("returns connections", async (done) => {
+    it("returns connections", async () => {
       const val = await event.response()
       let parsed = JSON.parse(val)
       assert.equal(parsed.value.connections, events.connection_number)
-      done()
     })
   })
   describe("LeftEvent", () => {
     let event = new events.LeftEvent(user)
     event.prepare = async () => {}
-    it("should decrease connection_number", async (done) => {
+    it("should decrease connection_number", async () => {
       events.connection_number = 1
       assert.equal(events.connection_number, 1)
       await event.response()
       assert.equal(events.connection_number, 0)
-      done()
     })
-    it("returns connections", async (done) => {
+    it("returns connections", async () => {
       const val = await event.response()
       let parsed = JSON.parse(val)
       assert.equal(parsed.value.connections, events.connection_number)
-      done()
     })
   })
   describe("CreateMessageEvent", () => {
@@ -48,21 +44,19 @@ describe("events", () => {
     let prepare_called: boolean
     event.prepare = async () => { prepare_called = true }
 
-    it("should call prepare", async (done) => {
+    it("should call prepare", async () => {
       prepare_called = false
       assert.equal(prepare_called, false)
       await event.response()
       assert.equal(prepare_called, true)
-      done()
     })
-    it("returns correct message", async (done) => {
+    it("returns correct message", async () => {
       const val = await event.response()
       let parsed = JSON.parse(val)
       assert.deepEqual(parsed, {
         ev: 'NEW_MESSAGE',
         value: { text: message, user: { name: user.name} }
       })
-      done()
     })
   })
   describe("DeleteMessageEvent", () => {
@@ -71,18 +65,16 @@ describe("events", () => {
     let prepare_called: boolean
     event.prepare = async () => { prepare_called = true }
 
-    it("should call prepare", async (done) => {
+    it("should call prepare", async () => {
       prepare_called = false
       assert.equal(prepare_called, false)
       await event.response()
       assert.equal(prepare_called, true)
-      done()
     })
-    it("returns correct message", async (done) => {
+    it("returns correct message", async () => {
       const val = await event.response()
       let parsed = JSON.parse(val)
       assert.deepEqual(parsed, { ev: 'DELETE_MESSAGE', value: '1' })
-      done()
     })
   })
 })
