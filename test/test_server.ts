@@ -5,26 +5,22 @@ import {Message, User, Connection} from "../server/models"
 import {IMessage, IUser} from "../common/data"
 
 describe("server", () => {
-  for (const model of [Message, User, Connection]) {
-    model.sync({force: true})
-  }
 
-  before(async (done) => {
-    try {
-      const user1 = await User.create({name: "alice"})
-      const user2 = await User.create({name: "bob"})
-      const user3 = await User.create({name: "carol"})
-      await Message.create({text: "foo", userId: user1.id})
-      await Message.create({text: "bar", userId: user1.id})
-      await Message.create({text: "baz", userId: user2.id})
-      await Connection.create({userId: user1.id})
-      await Connection.create({userId: user1.id})
-      await Connection.create({userId: user2.id})
-      done()
-    } catch (e) {
-      done(e)
+  beforeEach(async () => {
+    for (const model of [Message, User, Connection]) {
+      await model.sync({force: true})
     }
+    const user1 = await User.create({name: "alice"})
+    const user2 = await User.create({name: "bob"})
+    const user3 = await User.create({name: "carol"})
+    await Message.create({text: "foo", userId: user1.id})
+    await Message.create({text: "bar", userId: user1.id})
+    await Message.create({text: "baz", userId: user2.id})
+    await Connection.create({userId: user1.id})
+    await Connection.create({userId: user1.id})
+    await Connection.create({userId: user2.id})
   });
+
 
   describe("/messages", () => {
 
@@ -49,6 +45,12 @@ describe("server", () => {
       request(app)
         .get("/connections")
         .expect(200, JSON.stringify(expected), done)
+    })
+    it("returns empty when there is no available connection", done => {
+      Connection.sync({force: true})
+      request(app)
+        .get("/connections")
+        .expect(200, JSON.stringify([]), done)
     })
   })
 

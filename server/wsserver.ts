@@ -45,19 +45,19 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
     try {
       if (ws.readyState == ws.OPEN) {
         ws.send(newMessage(SendEventType.PING, ping_count++))
-        ping_available = false
-        setTimeout(() => {
-          if(ping_available === false) {
-            console.error("ping is not available")
-            ws.close()
-            clearInterval(interval)
-            return
-          }
-        } ,4000)
       }
     } catch (e) {
       console.log(e)
     }
+    ping_available = false
+    setTimeout(() => {
+      if(ping_available === false) {
+        console.error("ping is not available")
+        ws.close()
+        clearInterval(interval)
+        return
+      }
+    } ,4000)
   },4000)
 
   ws.on('message', async (undecoded_json: string) => {
