@@ -9,28 +9,34 @@ app.listen(0, null, null, function() {
 
 describe("wsserver", () => {
 
-  let ws: WebSocket
+  let ws1: WebSocket
+  let ws2: WebSocket
   beforeEach(() => {
-    ws = new WebSocket(`ws://127.0.0.1:${port}/`)
+    ws1 = new WebSocket(`ws://127.0.0.1:${port}/`, {
+      headers: { "Sec-WebSocket-Accept": "1" }
+    })
+    ws2 = new WebSocket(`ws://127.0.0.1:${port}/`, {
+      headers: { "Sec-WebSocket-Accept": "2" }
+    })
   })
   it("enables to connect", (done) => {
-    ws.on('open', () => {
+    ws1.on('open', () => {
       done()
     })
   })
   it("enables to disconnect", (done) => {
-    ws.on('open', () => {
-      ws.close()
+    ws1.on('open', () => {
+      ws1.close()
     })
-    ws.on('close', (data) => {
+    ws1.on('close', (data) => {
       done()
     })
   })
   it("closes automatically when pong event is not received", function (done)  {
     this.timeout(10 * 1000)
-    ws.on('open', () => {
+    ws1.on('open', () => {
     })
-    ws.on('close', (data) => {
+    ws1.on('close', (data) => {
       done()
     })
   })
@@ -38,7 +44,7 @@ describe("wsserver", () => {
     this.timeout(10 * 1000)
     let ping_times = 0
 
-    ws.on('message', (data) => {
+    ws1.on('message', (data) => {
       const {ev, value} = JSON.parse(data)
       switch(ev) {
         case "PING":
@@ -46,13 +52,37 @@ describe("wsserver", () => {
             "ev": "PONG",
             "value": value
           }
-          ws.send(JSON.stringify(pong))
+          ws1.send(JSON.stringify(pong))
           ping_times++
           break
       }
       if (ping_times > 1) {
+        ws1.close()
         done()
-        ws.close()
+      }
+    })
+  })
+  it("must be emit join event if user joins", function (done)  {
+    this.timeout(1 * 1000)
+    ws1.on('message', (data) => {
+      const {ev, value} = JSON.parse(data)
+      if (ev === "USER_JOIN") {
+        ws1.close()
+        done()
+      }
+    })
+  })
+  it("must be emit left event if user leaves", function (done)  {
+    this.timeout(2 * 1000)
+    ws2.on('message', (data) => {
+      const {ev, value} = JSON.parse(data)
+      console.log(ev)
+      if (ev === "USER_JOIN") {
+        ws1.close()
+      }
+      if (ev === "USER_LEAVE") {
+        ws2.close()
+        done()
       }
     })
   })
