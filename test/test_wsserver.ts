@@ -71,7 +71,7 @@ describe("wsserver", () => {
       if(success) done()
     })
   })
-  it("must be emit join event if user joins", function (done)  {
+  it("must emit join event if user joins", function (done)  {
     let success = false
     ws1.on('message', (data) => {
       const {ev, value} = JSON.parse(data)
@@ -84,7 +84,7 @@ describe("wsserver", () => {
       if(success) done()
     })
   })
-  it("must be emit left event if user leaves", function (done)  {
+  it("must emit left event if user leaves", function (done)  {
     this.timeout(20 * 1000)
     let success = false
     ws2.on('open', () => {
