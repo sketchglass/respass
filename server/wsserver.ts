@@ -32,7 +32,6 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
 
   // create connection
   const connection = await Connection.create({userId: user["id"], available: true})
-  const connection_id = connection.id
 
   // join event
   broadcast(await new JoinEvent(userData).response())
@@ -87,11 +86,7 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
     try {
       broadcast(await event.response())
       // destroy connection
-      await Connection.destroy({
-        where: {
-          id: connection_id
-        }
-      })
+      await connection.destroy()
     } catch(e) {
       // failed
     }
