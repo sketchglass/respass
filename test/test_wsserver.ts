@@ -3,7 +3,7 @@ import * as WebSocket from "ws"
 
 let port: number
 import "../server/wsserver"
-app.listen(0, null, null, function() { 
+app.listen(0, null, null, function() {
   port = this.address().port
 })
 
@@ -52,9 +52,9 @@ describe("wsserver", () => {
       }
       if (ping_times > 1) {
         done()
+        ws.close()
       }
     })
   })
-        
 })
 
