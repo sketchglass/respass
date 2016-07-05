@@ -9,90 +9,73 @@ abstract class BaseReceiveEvent {
   ev: SendEventType
   constructor(protected user: IUser, protected value?: string) {
   }
-  abstract prepare(): void
-  abstract response(target: Function): void
+  abstract prepare(): Promise<void>
+  abstract response(): Promise<string>
 }
 export
 class CreateMessageEvent extends BaseReceiveEvent{
   ev = SendEventType.NEW_MESSAGE
 
-  prepare() {
-    User.findOne({
+  async prepare() {
+    const user = await User.findOne({
       where: {
         name: this.user.name
       },
-    }).then((user: any) => {
-      Message.create({
-        text: this.value,
-        userId: user.id
-      })
+    })
+    await Message.create({
+      text: this.value,
+      userId: user.id
     })
   }
-  response(target: Function) {
+  async response() {
     if (this.value === "")
       return
 
-    this.prepare()
+    await this.prepare()
 
-    target(newMessage(this.ev, {
+    return newMessage(this.ev, {
       text: this.value,
       user: {
         name: this.user.name
       }
-    }))
+    })
   }
 }
 export
 class DeleteMessageEvent extends BaseReceiveEvent{
   ev = SendEventType.DELETE_MESSAGE
-  prepare() {
-    Message.destroy({where: {id: this.value}})
+  async prepare() {
+    await Message.destroy({where: {id: this.value}})
   }
-  response(target: Function) {
-    this.prepare()
-    return target(newMessage(this.ev, this.value) )
+  async response() {
+    await this.prepare()
+    return newMessage(this.ev, this.value)
   }
 }
 export
 class JoinEvent extends BaseReceiveEvent {
   ev = SendEventType.USER_JOIN
-  prepare() {
-    User.findOne({
-      where: {
-        name: this.user.name
-      },
-    }).then((user: any) => {
-      user.connecting = true
-      user.save()
-    })
+  async prepare() {
   }
-  response(target: Function) {
-    this.prepare()
+  async response() {
+    await this.prepare()
     connection_number += 1
-    return target(newMessage(this.ev, {
+    return newMessage(this.ev, {
       "connections": connection_number
-    }))
+    })
   }
 }
 export
 class LeftEvent extends BaseReceiveEvent {
   ev = SendEventType.USER_LEAVE
-  prepare() {
-    User.findOne({
-      where: {
-        name: this.user.name
-      },
-    }).then((user: any) => {
-      user.connecting = false
-      user.save()
-    })
+  async prepare() {
   }
-  response(target: Function) {
-    this.prepare()
+  async response() {
+    await this.prepare()
     connection_number -= 1
-    return target(newMessage(this.ev, {
+    return newMessage(this.ev, {
       "connections": connection_number
-    }))
+    })
   }
 }
 export

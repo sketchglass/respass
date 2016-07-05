@@ -33,6 +33,7 @@ export let User = sequelize.define<User, UserParams>('user', {
 interface ConnectionParams {
   available?: boolean;
   userId?: number;
+  id?: number;
 }
 export interface Connection extends Sequelize.Instance<Connection, ConnectionParams>, ConnectionParams {
   user?: User;

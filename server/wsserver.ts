@@ -19,46 +19,22 @@ let broadcast = (message: string): void => {
   })
 }
 
-app["ws"]("/", (ws: WebSocket, req: express.Request) => {
-  let user: IUser
-  if (req.user) {
-    user = {
-      name: req.user.name,
-    };
-  } else {
+app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
+  let user: User = req.user
+  if (!user) {
     // anonymous
     let random_username = Math.random().toString(36).substring(7)
-    user = {
+    user = await User.create({
       name: random_username,
-    }
-    User.create(user)
-  }
-
-  let connection = {
-    available: true
-  }
-
-  let connection_id: number
-
-  let create_connection = () => {
-    User.findOne({where: {name: user.name}}).then((user: any) => {
-      Connection.create({userId: user["id"], available: true}).then((connection: any) => {
-        connection_id = connection["id"]
-      })
     })
   }
-  let destroy_connection = () => {
-    Connection.destroy({
-      where: {
-        id: connection_id
-      }
-    })
-  }
-  create_connection()
+  const userData = {name: user.name}
 
+  // create connection
+  const connection = await Connection.create({userId: user["id"], available: true})
 
   // join event
-  new JoinEvent(user).response(broadcast)
+  broadcast(await new JoinEvent(userData).response())
 
   // ping/pong event
   let ping_count: number = 0
@@ -83,36 +59,34 @@ app["ws"]("/", (ws: WebSocket, req: express.Request) => {
     } ,4000)
   },4000)
 
-
-
-  ws.on('message', (undecoded_json: string) => {
+  ws.on('message', async (undecoded_json: string) => {
     try {
       let json = JSON.parse(undecoded_json)
       let {ev, value} = json
       let messageEvent: BaseReceiveEvent
 
       if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-        messageEvent = new CreateMessageEvent(user, value)
+        messageEvent = new CreateMessageEvent(userData, value)
       } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
-        messageEvent = new DeleteMessageEvent(user, value)
+        messageEvent = new DeleteMessageEvent(userData, value)
       }
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
         if (++value == ping_count) {
           ping_available = true
         }
       }
-      messageEvent.response(broadcast)
+      broadcast(await messageEvent.response())
     } catch(e) {
       // failed
     }
   })
 
-  let onClose = () => {
-    let event = new LeftEvent(user)
+  let onClose = async () => {
+    let event = new LeftEvent(userData)
     try {
-      event.response(broadcast)
+      broadcast(await event.response())
       // destroy connection
-      destroy_connection()
+      await connection.destroy()
     } catch(e) {
       // failed
     }
