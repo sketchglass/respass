@@ -35,7 +35,7 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   const connection_id = connection.id
 
   // join event
-  broadcast(await (new JoinEvent(userData).response()))
+  broadcast(await new JoinEvent(userData).response())
 
   // ping/pong event
   let ping_count: number = 0
