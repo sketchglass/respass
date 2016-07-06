@@ -53,7 +53,7 @@ describe("server", () => {
         .expect(200, JSON.stringify(expected), done)
     })
     it("returns empty when there is no available connection", done => {
-      Connection.sync({force: true})
+      Connection.destroy({where: {}})
       request(app)
         .get("/connections")
         .expect(200, JSON.stringify([]), done)

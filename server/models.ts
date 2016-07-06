@@ -2,7 +2,7 @@ import Sequelize = require("sequelize")
 import {IMessage, IUser} from "../common/data"
 
 const config = require("../../config/db")[process.env.NODE_ENV || "development"]
-export let sequelize = new Sequelize('sample', '', '', config)
+export let sequelize = new Sequelize(config.url)
 
 interface MessageParams {
   text?: string;
