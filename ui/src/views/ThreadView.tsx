@@ -86,11 +86,14 @@ const MessageView = (props: {message: IMessage}) => {
   const time = moment(createdAt).format("MMM Do, h:mm A")
   return (
     <div className="message">
-      <div className="info">
-        <div className="user">{user.name}</div>
-        <div className="time">{time}</div>
+      <img className="icon" src={user.iconUrl} />
+      <div className="texts">
+        <div className="info">
+          <div className="user">{user.name}</div>
+          <div className="time">{time}</div>
+        </div>
+        <div className="text">{text}</div>
       </div>
-      <div className="text">{text}</div>
     </div>
   );
 }
