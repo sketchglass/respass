@@ -107,10 +107,10 @@ const migration = {
     })
   },
   down: async (queryInterface: Sequelize.QueryInterface) => {
-    queryInterface.dropTable('TwitterIntegrations')
-    queryInterface.dropTable('connections')
-    queryInterface.dropTable('Messages')
-    queryInterface.dropTable('Users')
+    await queryInterface.dropTable('TwitterIntegrations')
+    await queryInterface.dropTable('connections')
+    await queryInterface.dropTable('Messages')
+    await queryInterface.dropTable('Users')
   }
 }
 
