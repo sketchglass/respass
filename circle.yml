@@ -7,3 +7,7 @@ dependencies:
     - typings install
   post:
     - npm rebuild
+database:
+  pre:
+    - createuser respass
+    - createdb respass-test
