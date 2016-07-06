@@ -84,7 +84,7 @@ const migration = {
       },
       twitterId: {
         allowNull: false,
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         unique: true
       },
       createdAt: {
@@ -98,6 +98,7 @@ const migration = {
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        unique: true,
         references: {
           model: "Users",
           key: "id"
