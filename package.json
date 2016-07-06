@@ -16,7 +16,7 @@
     "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
     "start": "npm-run-all --parallel start:*",
-    "deploy": "NODE_ENV=production npm-run-all prepare build",
+    "deploy": "NODE_ENV=production npm-run-all db:migrate prepare build",
     "pretest": "npm run compile:ts && npm run db:test:prepare",
     "test": "NODE_ENV=test mocha lib/test",
     "db:migrate": "npm run compile:ts && sequelize db:migrate",
