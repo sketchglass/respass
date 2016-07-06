@@ -1,8 +1,8 @@
 import Sequelize = require("sequelize")
 import {IMessage, IUser} from "../common/data"
 
-const storage = process.env.NODE_ENV === "test" ? "./test.db" : "./sample.db";
-export let sequelize = new Sequelize('sample','','',{dialect:'sqlite', storage})
+const config = require("../../config/db")[process.env.NODE_ENV || "development"]
+export let sequelize = new Sequelize('sample', '', '', config)
 
 interface MessageParams {
   text?: string;
