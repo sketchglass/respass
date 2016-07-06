@@ -12,9 +12,11 @@ app.get("/messages", async (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-  if (req.user) {
+  const user: User = req.user
+  if (user) {
     const json: IUser = {
-      name: req.user.name
+      name: user.name,
+      iconUrl: user.iconUrl
     };
     res.json(json);
   } else {
@@ -27,6 +29,7 @@ app.get("/connections", async (req, res) => {
   let response: IUser[] = users.filter(user => user.connections.length !== 0).map(user => {
     return {
       name: user.name,
+      iconUrl: user.iconUrl,
       connecting: user.connections.length !== 0
     };
   });

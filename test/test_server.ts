@@ -32,9 +32,9 @@ describe("server", () => {
 
     it("returns all messages", done => {
       const expected: IMessage[] = [
-        {text: "foo", user: {name: "alice"}, createdAt: message1.createdAt.toString()},
-        {text: "bar", user: {name: "alice"}, createdAt: message2.createdAt.toString()},
-        {text: "baz", user: {name: "bob"}, createdAt: message3.createdAt.toString()},
+        {text: "foo", user: {name: "alice", iconUrl: null}, createdAt: message1.createdAt.toString()},
+        {text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
+        {text: "baz", user: {name: "bob", iconUrl: null}, createdAt: message3.createdAt.toString()},
       ]
       request(app)
         .get("/messages")
@@ -45,8 +45,8 @@ describe("server", () => {
   describe("/connections", () => {
     it("returns all connections without duplicate", done => {
       const expected: IUser[] = [
-        {name: "alice", connecting: true},
-        {name: "bob", connecting: true},
+        {name: "alice", iconUrl: null, connecting: true},
+        {name: "bob", iconUrl: null, connecting: true},
       ]
       request(app)
         .get("/connections")

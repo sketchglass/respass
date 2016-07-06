@@ -1,14 +1,13 @@
 export
 interface IMessage {
-  text: string;
-  user: {
-    name: string;
-  };
-  createdAt: string;
+  text: string
+  user: IUser
+  createdAt: string
 }
 
 export
 interface IUser {
-  name: string,
-  connecting?: boolean,
+  name: string
+  iconUrl: string
+  connecting?: boolean
 }

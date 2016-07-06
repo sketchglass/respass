@@ -28,7 +28,7 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
       name: random_username,
     })
   }
-  const userData = {name: user.name}
+  const userData = {name: user.name, iconUrl: user.iconUrl}
 
   // create connection
   const connection = await Connection.create({userId: user["id"], available: true})

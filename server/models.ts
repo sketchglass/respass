@@ -22,7 +22,8 @@ export function messageToJSON(message: Message, user: IUser|User): IMessage {
   return {
     text: message.text,
     user: {
-      name: user.name
+      name: user.name,
+      iconUrl: user.iconUrl
     },
     createdAt: message.createdAt.toString(),
   }
