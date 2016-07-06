@@ -23,7 +23,7 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   let user: User = req.user
   if (!user) {
     // anonymous
-    let random_username = Math.random().toString(36).substring(7)
+    let random_username = Math.random().toString(36).substring(7).slice(0, 8)
     user = await User.create({
       name: random_username,
     })
