@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh $DEPLOY_TARGET bash -c "'
+ssh $DEPLOY_TARGET -p $DEPLOY_TARGET_PORT bash -c "'
 
 cd respass
 git pull
