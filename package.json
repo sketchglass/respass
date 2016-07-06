@@ -33,6 +33,7 @@
     "open": "0.0.5",
     "power-assert": "^1.4.1",
     "sass-loader": "^4.0.0",
+    "sequelize-cli": "^2.4.0",
     "style-loader": "^0.13.1",
     "supertest": "^1.2.0",
     "ts-loader": "^0.8.2",
