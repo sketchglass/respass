@@ -2,7 +2,7 @@ import * as Sequelize from "sequelize"
 
 const migration = {
   up: async (queryInterface: Sequelize.QueryInterface) => {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -21,7 +21,7 @@ const migration = {
         type: Sequelize.DATE
       }
     })
-    await queryInterface.createTable('Messages', {
+    await queryInterface.createTable('messages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -43,12 +43,12 @@ const migration = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
+          model: "users",
           key: "id"
         }
       }
     })
-    await queryInterface.createTable('Connections', {
+    await queryInterface.createTable('connections', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -70,12 +70,12 @@ const migration = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
+          model: "users",
           key: "id"
         }
       }
     })
-    await queryInterface.createTable('TwitterIntegrations', {
+    await queryInterface.createTable('twitterIntegrations', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -100,17 +100,17 @@ const migration = {
         type: Sequelize.INTEGER,
         unique: true,
         references: {
-          model: "Users",
+          model: "users",
           key: "id"
         }
       }
     })
   },
   down: async (queryInterface: Sequelize.QueryInterface) => {
-    await queryInterface.dropTable('TwitterIntegrations')
+    await queryInterface.dropTable('twitterIntegrations')
     await queryInterface.dropTable('connections')
-    await queryInterface.dropTable('Messages')
-    await queryInterface.dropTable('Users')
+    await queryInterface.dropTable('messages')
+    await queryInterface.dropTable('users')
   }
 }
 
