@@ -11,3 +11,8 @@ database:
   pre:
     - createuser respass
     - createdb respass-test
+deployment:
+  production:
+    branch: master
+    commands:
+      - ./scripts/deploy.sh
