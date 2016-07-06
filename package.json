@@ -59,6 +59,7 @@
     "normalize.css": "^4.1.1",
     "passport": "^0.3.2",
     "passport-twitter": "^1.0.4",
+    "pg": "^6.0.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "sequelize": "^3.23.4",
