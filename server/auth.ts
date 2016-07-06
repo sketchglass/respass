@@ -48,6 +48,8 @@ passport.use(new TwitterStrategy({
       user = await User.create({name: profile.username});
       integration = await TwitterIntegration.create({twitterId: id, userId: user.id});
     }
+    user.iconUrl = profile.photos[0].value
+    await user.save()
     done(null, user);
   } catch (error) {
     done(error);
