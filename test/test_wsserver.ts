@@ -43,7 +43,7 @@ describe("wsserver", () => {
     })
   })
   it("did not close connection when ping event is successfully received", function (done)  {
-    this.timeout(10 * 1000)
+    this.timeout(20 * 1000)
     let ping_times = 0
     let success = false
 
