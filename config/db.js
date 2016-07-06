@@ -1,14 +1,16 @@
+const {DATABASE_URL} = process.env
+
 module.exports = {
-  development: {
-    dialect: "sqlite",
-    storage: "sample.db",
-  },
   production: {
-    dialect: "sqlite",
-    storage: "sample.db",
+    url: DATABASE_URL,
+    dialect: "postgres",
+  },
+  development: {
+    url: "postgres://respass:@localhost/respass-dev",
+    dialect: "postgres",
   },
   test: {
-    dialect: "sqlite",
-    storage: "test.db",
+    url: "postgres://respass:@localhost/respass-test",
+    dialect: "postgres",
   },
 }
