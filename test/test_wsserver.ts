@@ -1,5 +1,6 @@
 import {app} from "../server/app"
 import * as WebSocket from "ws"
+import * as assert from "power-assert"
 
 import "../server/wsserver"
 
@@ -68,7 +69,7 @@ describe("wsserver", () => {
       }
     })
     ws1.on('close', () => {
-      if(success) done()
+      assert.equal(success, true); done()
     })
   })
   it("must emit join event if user joins", function (done)  {
@@ -81,7 +82,7 @@ describe("wsserver", () => {
       }
     })
     ws1.on('close', () => {
-      if(success) done()
+      assert.equal(success, true); done()
     })
   })
   it("must emit left event if user leaves", function (done)  {
@@ -109,7 +110,7 @@ describe("wsserver", () => {
       }
     })
     ws2.on('close', () => {
-      if(success) done()
+      assert.equal(success, true); done()
     })
   })
 })
