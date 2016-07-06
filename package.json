@@ -17,8 +17,11 @@
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
     "start": "npm-run-all --parallel start:*",
     "deploy": "NODE_ENV=production npm-run-all prepare build",
-    "pretest": "npm run compile:ts",
-    "test": "NODE_ENV=test mocha lib/test"
+    "pretest": "npm run compile:ts && npm run db:test:prepare",
+    "test": "NODE_ENV=test mocha lib/test",
+    "db:migrate": "npm run compile:ts && sequelize db:migrate",
+    "db:migrate:undo": "sequelize db:migrate:undo",
+    "db:test:prepare": "rm -f test.db && NODE_ENV=test sequelize db:migrate"
   },
   "author": "minamorl",
   "license": "ISC",
