@@ -5,7 +5,8 @@ import { IMessage, IUser } from "../common/data";
 import { ReceiveEventType, SendEventType } from "../common/eventType"
 
 let user: IUser = {
-  name: "sample user"
+  name: "sample user",
+  iconUrl: null
 }
 
 describe("events", () => {
@@ -56,7 +57,7 @@ describe("events", () => {
       let parsed = JSON.parse(val)
       assert.deepEqual(parsed, {
         ev: 'NEW_MESSAGE',
-        value: { text: message, user: { name: user.name}, createdAt: event.message.createdAt.toString() }
+        value: { text: message, user: {name: user.name, iconUrl: user.iconUrl}, createdAt: event.message.createdAt.toString() }
       })
     })
   })

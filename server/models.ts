@@ -22,15 +22,17 @@ export function messageToJSON(message: Message, user: IUser|User): IMessage {
   return {
     text: message.text,
     user: {
-      name: user.name
+      name: user.name,
+      iconUrl: user.iconUrl
     },
     createdAt: message.createdAt.toString(),
   }
 }
 
 interface UserParams {
-  name?: string;
-  id?: number;
+  name?: string
+  id?: number
+  iconUrl?: string
 }
 export interface User extends Sequelize.Instance<User, UserParams>, UserParams {
   messages?: Message[];
@@ -40,6 +42,7 @@ export interface User extends Sequelize.Instance<User, UserParams>, UserParams {
 
 export let User = sequelize.define<User, UserParams>('user', {
   name: Sequelize.STRING,
+  iconUrl: Sequelize.STRING,
 })
 
 interface ConnectionParams {
