@@ -17,7 +17,7 @@ describe("server", () => {
       await model.sync({force: true})
     }
     user1 = await User.create({name: "alice"})
-    user2 = await User.create({name: "bob"})
+    user2 = await User.create({name: "bob", iconUrl: "some_url"})
     user3 = await User.create({name: "carol"})
     message1 = await Message.create({text: "foo", userId: user1.id})
     message2 = await Message.create({text: "bar", userId: user1.id})
@@ -34,7 +34,7 @@ describe("server", () => {
       const expected: IMessage[] = [
         {text: "foo", user: {name: "alice", iconUrl: null}, createdAt: message1.createdAt.toString()},
         {text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
-        {text: "baz", user: {name: "bob", iconUrl: null}, createdAt: message3.createdAt.toString()},
+        {text: "baz", user: {name: "bob", iconUrl: "some_url"}, createdAt: message3.createdAt.toString()},
       ]
       request(app)
         .get("/messages")
@@ -46,7 +46,7 @@ describe("server", () => {
     it("returns all connections without duplicate", done => {
       const expected: IUser[] = [
         {name: "alice", iconUrl: null, connecting: true},
-        {name: "bob", iconUrl: null, connecting: true},
+        {name: "bob", iconUrl: "some_url", connecting: true},
       ]
       request(app)
         .get("/connections")
