@@ -30,6 +30,12 @@ describe("events", () => {
       let parsed = JSON.parse(val)
       assert.equal(parsed.value.connections, events.connection_number)
     })
+    it("returns users", async () => {
+      const val = await event.response()
+      let parsed = JSON.parse(val)
+      console.log(parsed)
+      assert.deepEqual(parsed.value.user, { name: 'sample user', iconUrl: null })
+    })
   })
   describe("LeftEvent", () => {
     let event = new events.LeftEvent(user)
