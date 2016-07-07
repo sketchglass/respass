@@ -28,8 +28,8 @@ describe("auth", () => {
   describe("/logout", () => {
     it("exists", done => {
       request(app)
-        .get("/auth/twitter/callback")
-        .expect(500, done)
+        .get("/logout")
+        .expect("Location", "dummy", done)
     })
   })
 })
