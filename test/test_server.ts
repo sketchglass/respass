@@ -3,7 +3,6 @@ import {app} from "../server/app"
 import "../server/api"
 import {Message, User, Connection} from "../server/models"
 import {IMessage, IUser} from "../common/data"
-
 describe("server", () => {
   let user1: User
   let user2: User
@@ -63,6 +62,16 @@ describe("server", () => {
   describe("/user", () => {
     it("returns null when user is not authed", done => {
       const expected: any = null
+      request(app)
+        .get("/user")
+        .expect(200, JSON.stringify(expected), done)
+    })
+    it("returns user when user is authed", done => {
+      const expected = {
+        "name":"bob","iconUrl":"some_url"
+      }
+      // fake user
+      app.request["user"] = user2
       request(app)
         .get("/user")
         .expect(200, JSON.stringify(expected), done)
