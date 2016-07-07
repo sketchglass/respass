@@ -11,6 +11,7 @@ class Thread extends EventEmitter {
   latestMessage: IMessage = null;
   connectionCount = 0;
   availableUsers: IUser[] = [];
+  currentUser: IUser = null;
 
   constructor() {
     super();
@@ -21,6 +22,9 @@ class Thread extends EventEmitter {
       try {
         const message = JSON.parse(event.data);
         switch (message.ev) {
+        case "WHOAMI":
+          this.currentUser = message.value;
+          break;
         case "NEW_MESSAGE":
           const newMessage = message as NewMessageEvent;
           this.messages.push(message.value);

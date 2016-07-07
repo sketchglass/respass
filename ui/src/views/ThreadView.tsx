@@ -154,10 +154,11 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
       connectionCount: 0
     };
     thread.on("messageUpdate", () => {
-      const {messages, latestMessage} = thread;
+      const {messages, latestMessage, currentUser} = thread;
       this.setState({messages});
-      if(latestMessage)
+      if(latestMessage && latestMessage.user.name !== currentUser.name) {
         notify(latestMessage)
+      }
     });
     thread.on("connectionUpdate", () => {
       const {connectionCount} = thread;
