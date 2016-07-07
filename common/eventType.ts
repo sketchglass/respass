@@ -5,6 +5,7 @@ enum ReceiveEventType {
   JOIN,
   PONG,
   LEFT,
+  WHOAMI,
 }
 
 export
@@ -14,4 +15,5 @@ enum SendEventType {
   USER_JOIN,
   USER_LEAVE,
   PING,
+  WHOAMI,
 }
