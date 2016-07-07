@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NODE_ENV=test ./node_modules/.bin/istanbul cover --include-all-sources --root lib ./node_modules/mocha/bin/_mocha -- lib/test
+NODE_ENV=test ./node_modules/.bin/istanbul cover -i "lib/**/*" ./node_modules/mocha/bin/_mocha -- lib/test
 cat coverage/coverage.json | ./node_modules/.bin/remap-istanbul -e config > coverage/coverage-remap.json
 ./node_modules/.bin/istanbul report lcovonly --include coverage/coverage-remap.json
 cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
