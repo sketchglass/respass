@@ -8,14 +8,15 @@
 ## Prerequisites
 
 - PostgreSQL
-- NodeJS (higher than 6.0)
+- NodeJS (>=6)
 
 ## DB Settings
 
-Create User `respass`
+Create User `respass` with empty password.
 ```
 createuser respass
 createdb respass-dev
+createdb respass-test
 ```
 
 ## Run
@@ -28,9 +29,8 @@ npm run db:migrate
 npm start
 ```
 
-## Test
+## Testing
 
 ```
-createdb respass-test
 npm test
 ```
