@@ -4,7 +4,7 @@ import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { app } from "./app";
 import { ReceiveEventType, SendEventType } from "../common/eventType"
-import { newMessage, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
+import { newMessage, WhoamiEvent, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
 
 const expressWs = require('express-ws')(app);
 const wss: WebSocket.Server = expressWs.getWss();
@@ -29,6 +29,13 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
     })
   }
   const userData = {name: user.name, iconUrl: user.iconUrl}
+
+  // whoami
+  try{
+    ws.send(await new WhoamiEvent(userData).response())
+  } catch (e) {
+    // do nothing
+  }
 
   // create connection
   const connection = await Connection.create({userId: user["id"], available: true})
