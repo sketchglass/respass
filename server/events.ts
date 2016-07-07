@@ -13,6 +13,16 @@ abstract class BaseReceiveEvent {
   abstract response(): Promise<string>
 }
 export
+class WhoamiEvent extends BaseReceiveEvent{
+  ev = SendEventType.WHOAMI
+
+  async prepare() {
+  }
+  async response() {
+    return newMessage(this.ev, this.user)
+  }
+}
+export
 class CreateMessageEvent extends BaseReceiveEvent{
   ev = SendEventType.NEW_MESSAGE
   message: Message
@@ -59,7 +69,8 @@ class JoinEvent extends BaseReceiveEvent {
     await this.prepare()
     connection_number += 1
     return newMessage(this.ev, {
-      "connections": connection_number
+      connections: connection_number,
+      user: this.user
     })
   }
 }
