@@ -60,4 +60,13 @@ describe("server", () => {
     })
   })
 
+  describe("/user", () => {
+    it("returns null when user is not authed", done => {
+      const expected: any = null
+      request(app)
+        .get("/user")
+        .expect(200, JSON.stringify(expected), done)
+    })
+  })
+
 })
