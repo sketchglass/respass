@@ -8,6 +8,7 @@ export
 class Thread extends EventEmitter {
   connetion = new ReconnectingWebSocket(`ws://${API_SERVER}`);
   messages: IMessage[] = [];
+  latestMessage: IMessage = null;
   connectionCount = 0;
   availableUsers: IUser[] = [];
 
@@ -22,8 +23,8 @@ class Thread extends EventEmitter {
         switch (message.ev) {
         case "NEW_MESSAGE":
           const newMessage = message as NewMessageEvent;
-          console.log("message received:", message);
           this.messages.push(message.value);
+          this.latestMessage = message.value;
           this.emit("messageUpdate");
           break;
         case "USER_JOIN":
@@ -55,6 +56,7 @@ class Thread extends EventEmitter {
     const response = await fetch(`http://${API_SERVER}/messages`);
     const messages: IMessage[] = await response.json();
     this.messages = messages;
+    this.latestMessage = null;
     this.emit("messageUpdate");
   }
 
