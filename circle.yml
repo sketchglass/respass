@@ -14,7 +14,7 @@ database:
 test:
   override:
     - npm run pretest
-    - npm run coveralls
+    - ./scripts/coveralls
 deployment:
   production:
     branch: master
