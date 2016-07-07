@@ -11,6 +11,10 @@ database:
   pre:
     - createuser respass
     - createdb respass-test
+test:
+  override:
+    - npm run pretest
+    - npm run coveralls
 deployment:
   production:
     branch: master
