@@ -6,7 +6,9 @@ app.get("/messages", async (req, res) => {
   const messages = await Message.findAll({
     include: [User],
     order: '"message"."createdAt"',
-  });
+    offset: parseInt(req.query.offset || 0),
+    limit: Math.min(parseInt(req.query.limit || 100), 100),
+  })
   const data = messages.map(m => messageToJSON(m, m.user))
   res.json(data);
 });
