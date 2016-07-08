@@ -31,4 +31,9 @@ module.exports = {
     contentBase: 'dist',
     port: 23000
   },
+  plugins: [
+    new webpack.EnvironmentPlugin([
+      "API_SERVER"
+    ])
+  ]
 };
