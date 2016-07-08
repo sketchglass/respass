@@ -4,7 +4,7 @@ ssh $DEPLOY_TARGET -p $DEPLOY_TARGET_PORT bash -c "'
 
 cd respass
 git pull
-DATABASE_URL=$PRODUCTION_SERVER npm run deploy
+API_SERVER=$API_SERVER DATABASE_URL=$PRODUCTION_SERVER npm run deploy
 sudo systemctl restart respass
 
 '"
