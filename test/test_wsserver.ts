@@ -38,6 +38,42 @@ describe("wsserver", () => {
       done()
     })
   })
+  it("can create messages up to 100 per hour", function (done)  {
+    this.timeout(10 * 1000)
+    let messageCount = 0
+    ws1.on('open', () => {
+      for (let i=0; i<200; i++) {
+        ws1.send(JSON.stringify({
+          "ev": "CREATE_MESSAGE",
+          "value": "sample message"
+        }))
+      }
+      ws1.close()
+    })
+    ws1.on('message', (data) => {
+      const {ev, value} = JSON.parse(data)
+      switch(ev) {
+        case "PING":
+          const pong = {
+            "ev": "PONG",
+            "value": value
+          }
+          try {
+            ws1.send(JSON.stringify(pong))
+          } catch(e) {
+            // nothing to do
+          }
+          break
+        case "NEW_MESSAGE":
+          messageCount++
+          break
+      }
+    })
+    ws1.on('close', (data) => {
+      assert.equal(messageCount, 100)
+      done()
+    })
+  })
   it("did not close connection when ping event is successfully received", function (done)  {
     this.timeout(20 * 1000)
     let ping_times = 0
