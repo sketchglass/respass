@@ -5,7 +5,7 @@ import {app} from "./app";
 app.get("/messages", async (req, res) => {
   const messages = await Message.findAll({
     include: [User],
-    //order: "createdAt", <- this doesn't work ???
+    order: '"message"."createdAt"',
   });
   const data = messages.map(m => messageToJSON(m, m.user))
   res.json(data);
