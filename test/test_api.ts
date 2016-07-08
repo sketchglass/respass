@@ -74,7 +74,10 @@ describe("api", () => {
       app.request.user = user2
       request(app)
         .get("/user")
-        .expect(200, JSON.stringify(expected), done)
+        .expect(200, JSON.stringify(expected), (err, res) => {
+          app.request.user = null
+          done(err)
+        })
     })
   })
 
