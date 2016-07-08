@@ -1,5 +1,6 @@
 import * as request from "supertest"
 import {app} from "../server/app"
+import "../server/auth"
 
 describe("auth", () => {
   // Due to dummy environment variables, it raises internal error.

@@ -2,6 +2,7 @@ import * as request from "supertest"
 import {app} from "../server/app"
 import {Message, User, Connection} from "../server/models"
 import {IMessage, IUser} from "../common/data"
+import "../server/api"
 
 describe("api", () => {
   let user1: User
