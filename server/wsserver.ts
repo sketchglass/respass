@@ -2,11 +2,11 @@ import * as WebSocket from "ws"
 import * as express from "express";
 import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
-import { app } from "./app";
+import { app, server } from "./app";
 import { ReceiveEventType, SendEventType } from "../common/eventType"
 import { newMessage, WhoamiEvent, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
 
-const expressWs = require('express-ws')(app);
+const expressWs = require('express-ws')(app, server);
 const wss: WebSocket.Server = expressWs.getWss();
 
 let broadcast = (message: string): void => {

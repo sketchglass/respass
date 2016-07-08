@@ -1,9 +1,10 @@
 import * as request from "supertest"
 import {app} from "../server/app"
-import "../server/api"
 import {Message, User, Connection} from "../server/models"
 import {IMessage, IUser} from "../common/data"
-describe("server", () => {
+import "../server/api"
+
+describe("api", () => {
   let user1: User
   let user2: User
   let user3: User
@@ -71,10 +72,13 @@ describe("server", () => {
         "name":"bob","iconUrl":"some_url"
       }
       // fake user
-      app.request["user"] = user2
+      app.request.user = user2
       request(app)
         .get("/user")
-        .expect(200, JSON.stringify(expected), done)
+        .expect(200, JSON.stringify(expected), (err, res) => {
+          app.request.user = null
+          done(err)
+        })
     })
   })
 
