@@ -6,11 +6,13 @@ import { Message, User, TwitterIntegration, Connection } from "./models"
 Connection.destroy({where: {}})
 
 process.on('uncaughtException', (err: any) => {
-  console.warn(`Caught exception: ${err}`);
+  console.warn(`Uncaught Exception: ${err}`);
+  console.warn(err.stack)
 })
 
-process.on('unhandledRejection', (reason: any, p: Promise<any>) => {
-    console.warn("Unhandled Rejection at: Promise ", p, " reason: ", reason);
+process.on('unhandledRejection', (err: any, p: Promise<any>) => {
+  console.warn(`Unhandled Rejection: ${err}`);
+  console.warn(err.stack)
 })
 
 export const app = express()
