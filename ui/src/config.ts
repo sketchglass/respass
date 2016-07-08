@@ -1,2 +1,2 @@
 
-export const API_SERVER = `${window.location.host}`;
+export const API_SERVER = process.env.API_SERVER

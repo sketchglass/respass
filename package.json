@@ -16,7 +16,7 @@
     "open-browser": "node -e 'setTimeout(function(){require(`open`)(`http://127.0.0.1:23000`)}, 2000)'",
     "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
-    "start": "npm-run-all prepare:reset --parallel start:*",
+    "start": "API_SERVER='127.0.0.1:8080' npm-run-all prepare:reset --parallel start:*",
     "deploy": "NODE_ENV=production npm-run-all prepare db:migrate build",
     "pretest": "npm-run-all prepare:reset compile:ts db:test:prepare",
     "test": "NODE_ENV=test mocha lib/test",
