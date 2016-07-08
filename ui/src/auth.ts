@@ -12,7 +12,7 @@ class Auth extends EventEmitter {
   }
 
   async fetchUser() {
-    const req = await fetch(`http://${API_SERVER}/user`, {
+    const req = await fetch(`${API_SERVER}/user`, {
       credentials: 'include'
     });
     this.user = await req.json();
@@ -23,11 +23,11 @@ class Auth extends EventEmitter {
   }
 
   logIn() {
-    location.href = `http://${API_SERVER}/auth/twitter`;
+    location.href = `${API_SERVER}/auth/twitter`;
   }
 
   logOut() {
-    location.href = `http://${API_SERVER}/logout`;
+    location.href = `${API_SERVER}/logout`;
   }
 }
 
