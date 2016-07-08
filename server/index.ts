@@ -1,5 +1,5 @@
 require('dotenv').config();
 
-import {listen} from "./server"
+import {server} from "./app"
 
-listen(process.env.PORT)
+server.listen(process.env.PORT)
