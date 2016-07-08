@@ -4,9 +4,13 @@ import {IMessage, IUser} from "../../common/data";
 import {API_SERVER} from "./config";
 const ReconnectingWebSocket: typeof WebSocket = require("ReconnectingWebSocket");
 
+const WS_URL = API_SERVER.indexOf("https") === 0
+  ? API_SERVER.replace("https", "wss")
+  : API_SERVER.replace("http", "ws")
+
 export
 class Thread extends EventEmitter {
-  connetion = new ReconnectingWebSocket(`ws://${API_SERVER}`);
+  connetion = new ReconnectingWebSocket(WS_URL);
   messages: IMessage[] = [];
   latestMessage: IMessage = null;
   connectionCount = 0;
@@ -50,14 +54,14 @@ class Thread extends EventEmitter {
   }
 
   async fetchAvailableUsers() {
-    const response = await fetch(`http://${API_SERVER}/connections`);
+    const response = await fetch(`${API_SERVER}/connections`);
     const availableUsers: IUser[] = await response.json();
     this.availableUsers = availableUsers;
     this.emit("connectionUpdate");
   }
 
   async fetchAllMessages() {
-    const response = await fetch(`http://${API_SERVER}/messages`);
+    const response = await fetch(`${API_SERVER}/messages`);
     const messages: IMessage[] = await response.json();
     this.messages = messages;
     this.latestMessage = null;
