@@ -13,4 +13,4 @@ import "./auth"
 import "./api"
 import "./wsserver"
 
-app.listen(8080);
+app.listen(process.env.PORT);
