@@ -1,3 +1,4 @@
+process.env.PORT = 9090
 process.env.FRONTEND_URL = "dummy"
 process.env.SESSION_SECRET = "dummy"
 process.env.TWITTER_CONSUMER_KEY = "dummy"
@@ -9,8 +10,8 @@ import "../server/index"
 import * as net from 'net'
 
 describe("index", () => {
-  it("start server listening at port 8080", done => {
-    let client = net.connect({port: 8080}, () => {
+  it("start server listening at port 9090", done => {
+    let client = net.connect({port: 9090}, () => {
       done()
       client.end()
     })
