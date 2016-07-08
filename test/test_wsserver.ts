@@ -4,17 +4,22 @@ import * as assert from "power-assert"
 
 import "../server/wsserver"
 
+
 describe("wsserver", () => {
 
   let ws1: WebSocket
   let ws2: WebSocket
-  beforeEach(() => {
-    let port = server.address().port
-    ws1 = new WebSocket(`ws://127.0.0.1:${port}/`, {
-      headers: { "Sec-WebSocket-Accept": "1" }
-    })
-    ws2 = new WebSocket(`ws://127.0.0.1:${port}/`, {
-      headers: { "Sec-WebSocket-Accept": "2" }
+  beforeEach(done => {
+    server.listen(0, () => {
+      let port = server.address().port
+      ws1 = new WebSocket(`ws://127.0.0.1:${port}/`, {
+        headers: { "Sec-WebSocket-Accept": "1" }
+      })
+      ws2 = new WebSocket(`ws://127.0.0.1:${port}/`, {
+        headers: { "Sec-WebSocket-Accept": "2" }
+      })
+      console.log(port)
+      done()
     })
   })
   it("enables to connect", (done) => {
