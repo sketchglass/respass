@@ -8,6 +8,7 @@ import { newMessage, WhoamiEvent, BaseReceiveEvent, JoinEvent, CreateMessageEven
 
 const expressWs = require('express-ws')(app, server);
 const wss: WebSocket.Server = expressWs.getWss();
+const messageLimitPerHour = 100
 
 let broadcast = (message: string): void => {
   wss.clients.forEach((client) => {
@@ -47,7 +48,7 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   let ping_count: number = 0
   let ping_available: boolean = false
 
-  let interval = setInterval(() => {
+  let ping_interval = setInterval(() => {
     try {
       if (ws.readyState == ws.OPEN) {
         ws.send(newMessage(SendEventType.PING, ping_count++))
@@ -60,11 +61,16 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
       if(ping_available === false) {
         console.error("ping is not available")
         ws.close()
-        clearInterval(interval)
+        clearInterval(ping_interval)
         return
       }
     } ,4000)
   },4000)
+
+  let messageCount = 0
+  setInterval(() => {
+    messageCount = 0
+  }, 60*60*1000)
 
   ws.on('message', async (undecoded_json: string) => {
     try {
@@ -73,9 +79,10 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
       let messageEvent: BaseReceiveEvent
 
       if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-        messageEvent = new CreateMessageEvent(userData, value)
-      } else if (ev === ReceiveEventType[ReceiveEventType.DELETE_MESSAGE]) {
-        messageEvent = new DeleteMessageEvent(userData, value)
+        if (messageCount < messageLimitPerHour) {
+          messageEvent = new CreateMessageEvent(userData, value)
+        }
+        messageCount++
       }
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
         if (++value == ping_count) {
