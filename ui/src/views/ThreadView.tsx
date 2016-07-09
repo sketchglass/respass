@@ -5,10 +5,8 @@ import {auth} from "../auth";
 import {IMessage, IUser} from "../../../common/data";
 import * as autolinker from "autolinker"
 import * as sanitizer from "sanitizer"
+import "../notification"
 
-
-// workaround (should be fixed)
-declare let Notification: any;
 
 interface UserListState {
   users: IUser[];
@@ -137,15 +135,6 @@ const HeaderView = () => {
   </div>
 }
 
-const notify = (msg: IMessage) => {
-  return Notification.requestPermission().then(function() {
-    const options = {
-      body: msg.text,
-      icon: msg.user.iconUrl,
-    }
-    new Notification(`New Message from ${msg.user.name}`, options)
-  })
-}
 
 interface ThreadViewState {
   messages?: IMessage[],
@@ -162,12 +151,9 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
       connectionCount: 0
     };
     thread.on("messageAppend", () => {
-      const {messages, latestMessage, currentUser} = thread;
+      const {messages} = thread;
       const atBottom = this.isAtBottom()
       this.setState({messages});
-      if(latestMessage && latestMessage.user.name !== currentUser.name) {
-        notify(latestMessage)
-      }
       if (atBottom) {
         this.scrollToBottom()
       }
