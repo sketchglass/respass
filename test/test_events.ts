@@ -61,9 +61,15 @@ describe("events", () => {
     it("returns correct message", async () => {
       const val = await event.response()
       let parsed = JSON.parse(val)
+      const expected: IMessage = {
+        id: event.message.id,
+        text: message,
+        user: {name: user.name, iconUrl: user.iconUrl},
+        createdAt: event.message.createdAt.toString()
+      }
       assert.deepEqual(parsed, {
         ev: 'NEW_MESSAGE',
-        value: { text: message, user: {name: user.name, iconUrl: user.iconUrl}, createdAt: event.message.createdAt.toString() }
+        value: expected
       })
     })
   })

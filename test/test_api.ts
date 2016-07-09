@@ -34,9 +34,9 @@ describe("api", () => {
 
     it("returns all messages", done => {
       const expected: IMessage[] = [
-        {text: "foo", user: {name: "alice", iconUrl: null}, createdAt: message1.createdAt.toString()},
-        {text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
-        {text: "baz", user: {name: "bob", iconUrl: "some_url"}, createdAt: message3.createdAt.toString()},
+        {id: 1, text: "foo", user: {name: "alice", iconUrl: null}, createdAt: message1.createdAt.toString()},
+        {id: 2, text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
+        {id: 3, text: "baz", user: {name: "bob", iconUrl: "some_url"}, createdAt: message3.createdAt.toString()},
       ]
       request(app)
         .get("/messages")
@@ -45,7 +45,7 @@ describe("api", () => {
 
     it("accepts limit and nextId", done => {
       const expected: IMessage[] = [
-        {text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
+        {id: 2, text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
       ]
       request(app)
         .get("/messages")
