@@ -40,6 +40,16 @@ describe("api", () => {
         .get("/messages")
         .expect(200, JSON.stringify(expected), done)
     })
+
+    it("accepts limit and nextId", done => {
+      const expected: IMessage[] = [
+        {text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
+      ]
+      request(app)
+        .get("/messages")
+        .query({limit: 1, nextId: 3})
+        .expect(200, JSON.stringify(expected), done)
+    })
   })
 
   describe("/connections", () => {
