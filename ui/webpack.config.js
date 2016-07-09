@@ -3,6 +3,24 @@
 const webpack = require("webpack");
 require('dotenv').config({path: "../.env"})
 
+let plugins = [
+  new webpack.EnvironmentPlugin([
+    "API_SERVER"
+  ]),
+]
+
+let pluginsProd = [
+  new webpack.optimize.UglifyJsPlugin({
+    compress: {
+      warnings: false
+    }
+  }),
+]
+
+if(process.env.NODE_ENV === "production") {
+  plugins = plugins.concat(pluginsProd)
+}
+
 module.exports = {
   entry: "./src/index.tsx",
   output: {
@@ -32,9 +50,5 @@ module.exports = {
     contentBase: 'dist',
     port: 23000
   },
-  plugins: [
-    new webpack.EnvironmentPlugin([
-      "API_SERVER"
-    ])
-  ]
+  plugins: plugins
 };
