@@ -50,14 +50,14 @@ body
 .thread-container
   margin: 0 auto
   max-width: 800px
-  display: flex
   padding: 20px
   padding-top: $header-height + 20px
   .user-list
     min-width: 200px
+    position: fixed
 
   .messages-container
-    flex: 1
+    padding-left: 200px
     display: flex
     flex-direction: column
     .messages
@@ -92,6 +92,10 @@ body
       height: 40px
       &:hover
         border: 2px solid darken($color-message-form-border, 20%)
+
 @media (max-width: 500px)
   .thread-container
-    flex-direction: column
+    .user-list
+      display: none
+    .messages-container
+      padding-left: 0
