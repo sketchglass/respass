@@ -3,15 +3,20 @@ import {IMessage, IUser} from "../common/data";
 import {app} from "./app";
 
 app.get("/messages", async (req, res) => {
+  const nextId = parseInt(req.query.nextId || 0)
+  const limit = Math.min(parseInt(req.query.limit) || 100, 100)
+  const where: any = {}
+  if (nextId) {
+    where['id'] = {$lt: nextId}
+  }
   const messages = await Message.findAll({
     include: [User],
-    order: '"message"."createdAt"',
-    offset: parseInt(req.query.offset || 0),
-    limit: Math.min(parseInt(req.query.limit || 100), 100),
+    order: '"message"."id" DESC', // <- TODO: fix Sequelize
+    where, limit
   })
-  const data = messages.map(m => messageToJSON(m, m.user))
-  res.json(data);
-});
+  const data = messages.map(m => messageToJSON(m, m.user)).reverse()
+  res.json(data)
+})
 
 app.get("/user", (req, res) => {
   const user: User = req.user

@@ -41,13 +41,13 @@ describe("api", () => {
         .expect(200, JSON.stringify(expected), done)
     })
 
-    it("accepts limit and offset", done => {
+    it("accepts limit and nextId", done => {
       const expected: IMessage[] = [
         {text: "bar", user: {name: "alice", iconUrl: null}, createdAt: message2.createdAt.toString()},
       ]
       request(app)
         .get("/messages")
-        .query({offset: 1, limit: 1})
+        .query({limit: 1, nextId: 3})
         .expect(200, JSON.stringify(expected), done)
     })
   })
