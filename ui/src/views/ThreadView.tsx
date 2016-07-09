@@ -3,6 +3,9 @@ import * as moment from "moment"
 import {thread} from "../thread";
 import {auth} from "../auth";
 import {IMessage, IUser} from "../../../common/data";
+import * as autolinker from "autolinker"
+import * as sanitizer from "sanitizer"
+
 
 // workaround (should be fixed)
 declare let Notification: any;
@@ -87,6 +90,11 @@ class UserView extends React.Component<{}, UserViewState> {
 const MessageView = (props: {message: IMessage}) => {
   const {text, user, createdAt} = props.message;
   const time = moment(createdAt).format("MMM Do, h:mm A")
+  const linked = () => {
+    return {
+      __html: autolinker.link(sanitizer.escape(text))
+    }
+  }
   return (
     <div className="message">
       <img className="icon" src={user.iconUrl} />
@@ -95,7 +103,7 @@ const MessageView = (props: {message: IMessage}) => {
           <div className="user">{user.name}</div>
           <div className="time">{time}</div>
         </div>
-        <div className="text">{text}</div>
+        <div className="text" dangerouslySetInnerHTML={linked()} />
       </div>
     </div>
   );
