@@ -70,15 +70,18 @@ body
           height: 32px
           margin-right: 10px
           border-radius: 4px
-        .info
-          .user
-            display: inline-block
-            color: $color-message-user
-            font-weight: bold
-            margin-right: 10px
-          .time
-            display: inline-block
-            color: $color-message-time
+        .texts
+          flex: 1
+          word-break: break-all
+          .info
+            .user
+              display: inline-block
+              color: $color-message-user
+              font-weight: bold
+              margin-right: 10px
+            .time
+              display: inline-block
+              color: $color-message-time
     .message-form
       -webkit-appearance: none
       appearance: none
