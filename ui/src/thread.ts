@@ -36,7 +36,7 @@ class Thread extends EventEmitter {
           const newMessage = message as NewMessageEvent;
           this.messages.push(message.value);
           this.latestMessage = message.value;
-          this.emit("messageUpdate");
+          this.emit("messageAppend");
           break;
         case "USER_JOIN":
         case "USER_LEAVE":
@@ -68,7 +68,7 @@ class Thread extends EventEmitter {
     const messages: IMessage[] = await response.json();
     this.messages = messages;
     this.latestMessage = null;
-    this.emit("messageUpdate");
+    this.emit("messageAppend");
   }
 
   async fetchOlderMessages() {
@@ -83,7 +83,7 @@ class Thread extends EventEmitter {
     } else {
       this.messages.unshift(...messages)
       this.latestMessage = null
-      this.emit("messageUpdate")
+      this.emit("messagePrepend")
     }
   }
 

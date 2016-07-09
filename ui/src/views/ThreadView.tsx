@@ -153,7 +153,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
       messages: [],
       connectionCount: 0
     };
-    thread.on("messageUpdate", () => {
+    thread.on("messageAppend", () => {
       const {messages, latestMessage, currentUser} = thread;
       const atBottom = this.isAtBottom()
       this.setState({messages});
@@ -164,6 +164,13 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
         this.scrollToBottom()
       }
     });
+    thread.on("messagePrepend", () => {
+      const {messages} = thread
+      const oldHeight = document.body.scrollHeight
+      this.setState({messages})
+      const height = document.body.scrollHeight
+      window.scrollBy(0, height - oldHeight)
+    })
     thread.on("connectionUpdate", () => {
       const {connectionCount} = thread;
       this.setState({connectionCount});
