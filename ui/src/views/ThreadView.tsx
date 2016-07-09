@@ -159,11 +159,16 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
       if(latestMessage && latestMessage.user.name !== currentUser.name) {
         notify(latestMessage)
       }
+      this.scrollToBottom()
     });
     thread.on("connectionUpdate", () => {
       const {connectionCount} = thread;
       this.setState({connectionCount});
     });
+  }
+
+  scrollToBottom() {
+    window.scrollTo(0, document.body.scrollHeight)
   }
 
   render() {

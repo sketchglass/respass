@@ -5,12 +5,15 @@ $color-message-time: #8e8e8e
 $color-message-form-border: #cccccc
 $color-header-background: #525282
 $color-header: #ffffff
+$header-height: 50px
 
 body
   font-family: -apple-system, ‘Helvetica Neue’, ‘Hiragino Kaku Gothic ProN’, ‘メイリオ’, meiryo, sans-serif
 
 .header
-  height: 50px
+  position: fixed
+  width: 100vw
+  height: $header-height
   max-width: 100%
   border-bottom: 1px solid darken($color-header-background, 15%)
   color: $color-header
@@ -46,6 +49,7 @@ body
   max-width: 800px
   display: flex
   padding: 20px
+  padding-top: $header-height + 20px
   .user-list
     min-width: 200px
 
