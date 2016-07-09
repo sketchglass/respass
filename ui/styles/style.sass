@@ -50,14 +50,14 @@ body
 .thread-container
   margin: 0 auto
   max-width: 800px
-  display: flex
   padding: 20px
   padding-top: $header-height + 20px
   .user-list
     min-width: 200px
+    position: fixed
 
   .messages-container
-    flex: 1
+    padding-left: 200px
     display: flex
     flex-direction: column
     .messages
@@ -70,15 +70,19 @@ body
           height: 32px
           margin-right: 10px
           border-radius: 4px
-        .info
-          .user
-            display: inline-block
-            color: $color-message-user
-            font-weight: bold
-            margin-right: 10px
-          .time
-            display: inline-block
-            color: $color-message-time
+        .texts
+          flex: 1
+          .text
+            word-break: break-all
+          .info
+            .user
+              display: inline-block
+              color: $color-message-user
+              font-weight: bold
+              margin-right: 10px
+            .time
+              display: inline-block
+              color: $color-message-time
     .message-form
       -webkit-appearance: none
       appearance: none
@@ -89,6 +93,10 @@ body
       height: 40px
       &:hover
         border: 2px solid darken($color-message-form-border, 20%)
+
 @media (max-width: 500px)
   .thread-container
-    flex-direction: column
+    .user-list
+      display: none
+    .messages-container
+      padding-left: 0
