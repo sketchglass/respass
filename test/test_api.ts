@@ -1,4 +1,6 @@
 import * as request from "supertest"
+import * as superagent from "superagent"
+import * as assert from "power-assert"
 import {app} from "../server/app"
 import {Message, User, Connection} from "../server/models"
 import {IMessage, IUser} from "../common/data"
@@ -49,6 +51,26 @@ describe("api", () => {
         .get("/messages")
         .query({limit: 1, nextId: 3})
         .expect(200, JSON.stringify(expected), done)
+    })
+
+    describe("when there are 100+ messages", () => {
+      beforeEach(async () => {
+        const messages: {}[] = []
+        for (let i = 0; i < 100; ++i) {
+          messages.push({userId: user1.id})
+        }
+        await Message.bulkCreate(messages)
+      })
+
+      it("returns only 100 messages", done => {
+        request(app)
+          .get("/messages")
+          .expect((res: superagent.Response) => {
+            assert.equal(res.status, 200)
+            assert.equal(res.body.length, 100)
+          })
+          .end(done)
+      })
     })
   })
 
