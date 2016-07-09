@@ -72,6 +72,9 @@ class Thread extends EventEmitter {
   }
 
   async fetchOlderMessages() {
+    if (!this.hasOlderMessages) {
+      return
+    }
     if (this.messages.length == 0) {
       return
     }
