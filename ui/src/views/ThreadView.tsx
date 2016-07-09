@@ -168,6 +168,14 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
       const {connectionCount} = thread;
       this.setState({connectionCount});
     });
+    window.addEventListener("scroll", () => this.onScroll())
+  }
+
+  onScroll() {
+    const INFINITE_SCROLL_THRESHOLD = 100
+    if (window.scrollY < INFINITE_SCROLL_THRESHOLD) {
+      thread.fetchOlderMessages()
+    }
   }
 
   isAtBottom() {

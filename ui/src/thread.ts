@@ -8,6 +8,8 @@ const WS_URL = API_SERVER.indexOf("https") === 0
   ? API_SERVER.replace("https", "wss")
   : API_SERVER.replace("http", "ws")
 
+const PER_PAGE = 10
+
 export
 class Thread extends EventEmitter {
   connetion = new ReconnectingWebSocket(WS_URL);
@@ -16,11 +18,12 @@ class Thread extends EventEmitter {
   connectionCount = 0;
   availableUsers: IUser[] = [];
   currentUser: IUser = null;
+  hasOlderMessages = true
 
   constructor() {
     super();
     this.connetion.onopen = () => {
-      this.fetchAllMessages();
+      this.fetchLatestMessages();
     };
     this.connetion.onmessage = (event) => {
       try {
@@ -60,12 +63,28 @@ class Thread extends EventEmitter {
     this.emit("connectionUpdate");
   }
 
-  async fetchAllMessages() {
-    const response = await fetch(`${API_SERVER}/messages`);
+  async fetchLatestMessages() {
+    const response = await fetch(`${API_SERVER}/messages?limit=${PER_PAGE}`);
     const messages: IMessage[] = await response.json();
     this.messages = messages;
     this.latestMessage = null;
     this.emit("messageUpdate");
+  }
+
+  async fetchOlderMessages() {
+    if (this.messages.length == 0) {
+      return
+    }
+    const lastId = this.messages[0].id
+    const response = await fetch(`${API_SERVER}/messages?limit=${PER_PAGE}&nextId=${lastId}`);
+    const messages: IMessage[] = await response.json();
+    if (messages.length == 0) {
+      this.hasOlderMessages = false
+    } else {
+      this.messages.unshift(...messages)
+      this.latestMessage = null
+      this.emit("messageUpdate")
+    }
   }
 
   newMessage(message: string) {
