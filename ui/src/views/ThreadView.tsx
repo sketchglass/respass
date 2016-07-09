@@ -30,7 +30,7 @@ class UserList extends React.Component<{}, UserListState> {
     return (
       <div className="user-list">
         <ul>
-          {users.map((user, i)=><li key={i}><img className="icon" src={user.iconUrl} />{user.name}</li>)}
+          {users.map((user, i)=><li key={i}><img className="icon" src={user.iconUrl} /><span className="name">{user.name}</span></li>)}
         </ul>
       </div>
     );

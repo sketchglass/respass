@@ -11,7 +11,7 @@ $header-height: 35px
 $user-list-width: 300px
 
 body
-  font-family: -apple-system, ‘Helvetica Neue’, ‘Hiragino Kaku Gothic ProN’, ‘メイリオ’, meiryo, sans-serif
+  font-family: Raleway, sans-serif
 
 .header
   position: fixed
@@ -47,20 +47,21 @@ body
     min-width: $user-list-width
     position: fixed
     background-color: $color-user-list-background
-    font-family: Raleway
     color: $color-user-list
     ul
       padding: 0
       li
-        font-size: 24px
+        display: flex
+        align-items: center
+        font-size: 16px
         list-style: none
-        padding: 12px
+        padding: 12px 24px
+        height: 32px
         .icon
           width: 32px
           height: 32px
-          margin-right: 10px
+          margin-right: 12px
           border-radius: 50%
-          vertical-align: text-bottom
   .thread-container
 
     .messages-container
@@ -81,8 +82,8 @@ body
           margin: 30px 0
           display: flex
           .icon
-            width: 32px
-            height: 32px
+            width: 48px
+            height: 48px
             margin-right: 10px
             border-radius: 50%
           .texts
