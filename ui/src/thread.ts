@@ -8,7 +8,7 @@ const WS_URL = API_SERVER.indexOf("https") === 0
   ? API_SERVER.replace("https", "wss")
   : API_SERVER.replace("http", "ws")
 
-const PER_PAGE = 10
+const MESSAGE_PER_PAGE = 100
 
 export
 class Thread extends EventEmitter {
@@ -64,7 +64,7 @@ class Thread extends EventEmitter {
   }
 
   async fetchLatestMessages() {
-    const response = await fetch(`${API_SERVER}/messages?limit=${PER_PAGE}`);
+    const response = await fetch(`${API_SERVER}/messages?limit=${MESSAGE_PER_PAGE}`);
     const messages: IMessage[] = await response.json();
     this.messages = messages;
     this.latestMessage = null;
@@ -76,7 +76,7 @@ class Thread extends EventEmitter {
       return
     }
     const lastId = this.messages[0].id
-    const response = await fetch(`${API_SERVER}/messages?limit=${PER_PAGE}&nextId=${lastId}`);
+    const response = await fetch(`${API_SERVER}/messages?limit=${MESSAGE_PER_PAGE}&nextId=${lastId}`);
     const messages: IMessage[] = await response.json();
     if (messages.length == 0) {
       this.hasOlderMessages = false
