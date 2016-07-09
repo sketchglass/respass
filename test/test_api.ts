@@ -56,7 +56,7 @@ describe("api", () => {
     describe("when there are 100+ messages", () => {
       beforeEach(async () => {
         const messages: {}[] = []
-        for (let i = 0; i < 100; ++i) {
+        for (let i = 0; i < 150; ++i) {
           messages.push({userId: user1.id})
         }
         await Message.bulkCreate(messages)
