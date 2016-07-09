@@ -5,6 +5,7 @@
     "sequelize": "registry:npm/sequelize#3.0.0+20160604152601"
   },
   "globalDependencies": {
+    "autolinker": "registry:dt/autolinker#0.24.0+20160220081534",
     "cors": "registry:dt/cors#0.0.0+20160317120654",
     "empower": "registry:dt/empower#0.0.0+20160317120654",
     "express": "registry:dt/express#4.0.0+20160317120654",
@@ -19,6 +20,7 @@
     "power-assert-formatter": "registry:dt/power-assert-formatter#0.0.0+20160317120654",
     "react": "registry:dt/react#0.14.0+20160621225615",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
+    "sanitizer": "registry:dt/sanitizer#0.0.0+20160316155526",
     "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
     "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
     "superagent": "registry:dt/superagent#1.4.0+20160317120654",
