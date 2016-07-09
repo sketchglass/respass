@@ -20,6 +20,7 @@ export let Message = sequelize.define<Message, {}>('message', {
 
 export function messageToJSON(message: Message, user: IUser|User): IMessage {
   return {
+    id: message.id,
     text: message.text,
     user: {
       name: user.name,
