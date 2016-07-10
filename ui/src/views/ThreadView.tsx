@@ -172,7 +172,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
   }
 
   onScroll() {
-    const INFINITE_SCROLL_THRESHOLD = 100
+    const INFINITE_SCROLL_THRESHOLD = 500
     if (window.scrollY < INFINITE_SCROLL_THRESHOLD) {
       thread.fetchOlderMessages()
     }
