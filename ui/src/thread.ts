@@ -32,6 +32,7 @@ class Thread extends EventEmitter {
   availableUsers: IUser[] = [];
   currentUser: IUser = null;
   hasOlderMessages = true
+  fetchingOlderMessages = false
 
   constructor() {
     super();
@@ -88,12 +89,16 @@ class Thread extends EventEmitter {
   }
 
   async fetchOlderMessages() {
+    if (this.fetchingOlderMessages) {
+      return
+    }
     if (!this.hasOlderMessages) {
       return
     }
     if (this.messages.length == 0) {
       return
     }
+    this.fetchingOlderMessages = true
     const lastId = this.messages[0].id
     const response = await fetch(`${API_SERVER}/messages?limit=${MESSAGE_PER_PAGE}&nextId=${lastId}`);
     const messages: IMessage[] = await response.json();
@@ -105,6 +110,7 @@ class Thread extends EventEmitter {
       this.latestMessage = null
       this.emit("messagePrepend")
     }
+    this.fetchingOlderMessages = false
   }
 
   newMessage(message: string) {
