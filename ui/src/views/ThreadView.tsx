@@ -66,14 +66,14 @@ class UserView extends React.Component<{}, UserViewState> {
         <div className="user-view">
           <img className="icon" src={user.iconUrl} />
           <div className="name">{user.name}</div>
-          <a href="#" className="sign-out" onClick={signOut}>Log Out</a>
+          <a className="sign-out" onClick={signOut}>Log Out</a>
         </div>
       )
     } else if (loggedOut) {
       const signIn = () => auth.logIn();
       return (
         <div className="user-view">
-          <a href="#" className="sign-in" onClick={signIn}>Log In</a>
+          <a className="sign-in" onClick={signIn}>Log In</a>
         </div>
       )
     } else { return ( <div className="user-view">
