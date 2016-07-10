@@ -20,7 +20,9 @@ if (window["Notification"]) {
 
   thread.on("messageAppend", () => {
     const {latestMessage, currentUser} = thread;
-    if(latestMessage && latestMessage.user.name !== currentUser.name)
+    if(latestMessage
+       && latestMessage.user.name !== currentUser.name
+       && !window.document.hasFocus())
       notify(latestMessage)
   })
 }
