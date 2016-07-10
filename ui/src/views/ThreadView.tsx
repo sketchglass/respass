@@ -29,9 +29,8 @@ class UserList extends React.Component<{}, UserListState> {
     const {users} = this.state;
     return (
       <div className="user-list">
-        <div>Available users:</div>
         <ul>
-          {users.map((user, i)=><li key={i}>{user.name}</li>)}
+          {users.map((user, i)=><li key={i}><img className="icon" src={user.iconUrl} /><span className="name">{user.name}</span></li>)}
         </ul>
       </div>
     );
@@ -190,15 +189,17 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
   render() {
     const {messages} = this.state;
     return (
-      <div className="thread">
+      <div className="app-container">
         <HeaderView />
-        <div className="thread-container">
+        <div className="thread">
           <UserList />
-          <div className="messages-container">
-            <div className="messages">
-              {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
+          <div className="thread-container">
+            <div className="messages-container">
+              <div className="messages">
+                {messages.map((msg, i) => <MessageView key={i} message={msg} />)}
+              </div>
+              <MessageForm />
             </div>
-            <MessageForm />
           </div>
         </div>
       </div>

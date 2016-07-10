@@ -1,14 +1,19 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:700)
+@import url(https://fonts.googleapis.com/css?family=Raleway:600,500,400,300,200,200italic)
 
-$color-message-user: #242424
-$color-message-time: #8e8e8e
+$color-message-user: #303030
+$color-message-time: #9B9B9B
 $color-message-form-border: #cccccc
-$color-header-background: #525282
-$color-header: #ffffff
+$color-user-list-background: #525282
+$color-user-list: rgba(255,255,255,0.8)
+$color-header-background: #ffffff
+$color-header: #3f3f3f
 $header-height: 35px
+$user-list-width: 240px
+$color-text: #303030
 
 body
-  font-family: -apple-system, ‘Helvetica Neue’, ‘Hiragino Kaku Gothic ProN’, ‘メイリオ’, meiryo, sans-serif
+  font-family: Raleway, "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif
+  -webkit-font-smoothing: antialiased
 
 .header
   position: fixed
@@ -21,7 +26,7 @@ body
   color: $color-header
   background-color: $color-header-background
   & > *
-    padding-left: 10px
+    padding-left: $user-list-width + 10px
     padding-right: 10px
   .app-name
     font-family: Raleway
@@ -33,70 +38,101 @@ body
     display: flex
     font-size: 12px
     .name
-      margin-right: 10px
-    a
-      color: $color-header
-      &:hover
-        color: darken($color-header, 15%)
+      margin-right: 8px
 
-.user-list
-  div:first-child
-    font-weight: bold
-  ul
-    padding: 0
-    margin: 0 0 20px 0
-    li
-      list-style: none
-.thread-container
-  margin: 0 auto
-  max-width: 800px
-  padding: 20px
-  padding-top: $header-height + 20px
+
+.thread
   .user-list
-    min-width: 200px
-    position: fixed
-
-  .messages-container
-    padding-left: 200px
     display: flex
     flex-direction: column
-    .messages
-      margin-bottom: 10px
-      .message
-        margin: 10px 0
+    justify-content: center
+    z-index: 1
+    height: 100%
+    min-width: $user-list-width
+    position: fixed
+    background-color: $color-user-list-background
+    color: $color-user-list
+    ul
+      padding: 0
+      li
         display: flex
+        align-items: center
+        font-size: 16px
+        font-weight: 600
+        list-style: none
+        padding: 12px 24px
+        height: 32px
         .icon
           width: 32px
           height: 32px
-          margin-right: 10px
-          border-radius: 4px
-        .texts
-          flex: 1
-          .text
-            word-break: break-all
-          .info
-            .user
-              display: inline-block
-              color: $color-message-user
-              font-weight: bold
-              margin-right: 10px
-            .time
-              display: inline-block
-              color: $color-message-time
-    .message-form
-      -webkit-appearance: none
-      appearance: none
-      resize: none
-      outline: none
-      border-radius: 2px
-      border: 2px solid $color-message-form-border
-      height: 40px
-      &:hover
-        border: 2px solid darken($color-message-form-border, 20%)
+          margin-right: 12px
+          border-radius: 50%
+  .thread-container
+
+    .messages-container
+      padding: $header-height 0 0 $user-list-width
+      margin: 0 auto
+      max-width: 100vw
+      display: flex
+      flex-direction: column
+      .name
+        margin-right: 10px
+      a
+        color: $color-user-list
+        &:hover
+          color: darken($color-user-list, 15%)
+      .messages
+        margin-left: 40px
+        margin-right: 40px
+        .message
+          margin: 24px 0
+          display: flex
+          .icon
+            width: 48px
+            height: 48px
+            margin-right: 12px
+            border-radius: 50%
+          .texts
+            flex: 1
+            .text
+              word-break: break-all
+              color: $color-text
+            .info
+              margin-bottom: 4px
+              .user
+                display: inline-block
+                color: $color-message-user
+                font-weight: 500
+                margin-right: 12px
+              .time
+                display: inline-block
+                color: $color-message-time
+                font-weight: 300
+      .message-form
+        -webkit-appearance: none
+        appearance: none
+        resize: none
+        outline: none
+        border-radius: 8px
+        border: 2px solid $color-message-form-border
+        padding: 8px
+        height: 44px
+        margin: 0 32px 32px 32px
+        color: $color-text
+        &:hover
+          border: 2px solid darken($color-message-form-border, 20%)
 
 @media (max-width: 500px)
-  .thread-container
+  .header
+    & > *
+      padding-left: 10px
+  .thread
     .user-list
       display: none
-    .messages-container
-      padding-left: 0
+    .thread-container
+      .messages-container
+        padding: 0
+        .messages
+          margin: 0 24px
+        .message-form
+          margin: 0 16px 16px 16px

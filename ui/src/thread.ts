@@ -17,6 +17,12 @@ function completeMessageData(message: IMessage) {
   }
 }
 
+function completeUserData(user: IUser) {
+  if (!user.iconUrl) {
+    user.iconUrl = iconGenerator.generate(user.name)
+  }
+}
+
 export
 class Thread extends EventEmitter {
   connetion = new ReconnectingWebSocket(WS_URL);
@@ -67,6 +73,7 @@ class Thread extends EventEmitter {
   async fetchAvailableUsers() {
     const response = await fetch(`${API_SERVER}/connections`);
     const availableUsers: IUser[] = await response.json();
+    availableUsers.forEach(completeUserData)
     this.availableUsers = availableUsers;
     this.emit("connectionUpdate");
   }
