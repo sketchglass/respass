@@ -64,7 +64,7 @@
     "passport": "^0.3.2",
     "passport-twitter": "^1.0.4",
     "pg": "^6.0.1",
-    "randomicon": "github:seanchas116/randomicon#5cbf4dcaeda4cb04619be37bf724beefaf630676",
+    "randomicon": "github:seanchas116/randomicon#bfd986f5516e1c9eda6768bddc78936f01af4b3d",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "sanitizer": "^0.1.3",
