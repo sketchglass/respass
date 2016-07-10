@@ -61,7 +61,7 @@ passport.use(new TwitterStrategy({
       integration = await TwitterIntegration.create({twitterId: id, userId: user.id});
     }
     const iconUrl = profile.photos[0].value
-    user.iconUrl = iconUrl.replace(/_normal\./, ".")
+    user.iconUrl = iconUrl.replace("_normal.", ".")
     await user.save()
     done(null, user);
   } catch (error) {
