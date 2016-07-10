@@ -2,8 +2,9 @@ import * as session from 'express-session';
 import * as passport from "passport";
 import {Strategy as TwitterStrategy} from "passport-twitter";
 import * as cors from "cors";
+const SequelizeStore = require("connect-session-sequelize")(session.Store)
 
-import {Message, User, TwitterIntegration, Connection} from "./models";
+import {sequelize, Message, User, TwitterIntegration, Connection} from "./models";
 import {app} from "./app"
 
 const {
@@ -18,7 +19,18 @@ app.use(cors({
   origin: FRONTEND_URL,
   credentials: true
 }));
-app.use(session({secret: SESSION_SECRET}));
+
+const sessionStore = new SequelizeStore({db: sequelize})
+sessionStore.sync()
+
+app.use(session({
+  secret: SESSION_SECRET,
+  store: sessionStore,
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  }
+}))
+
 app.use(passport.initialize());
 app.use(passport.session());
 
