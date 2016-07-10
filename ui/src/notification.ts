@@ -12,7 +12,10 @@ if (window["Notification"]) {
       body: msg.text,
       icon: msg.user.iconUrl,
     }
-    return new Notification(`New Message from @${msg.user.name}`, options)
+    let notification = new Notification(`New Message from @${msg.user.name}`, options)
+    notification.onclick = (e: any) => {
+      window.focus()
+    }
   }
 
   thread.on("messageAppend", () => {
