@@ -22,7 +22,7 @@ if (window["Notification"]) {
     const {latestMessage, currentUser} = thread;
     if(latestMessage
        && latestMessage.user.name !== currentUser.name
-       && document.hidden)
+       && !document.hasFocus())
       notify(latestMessage)
   })
 }
