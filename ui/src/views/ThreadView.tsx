@@ -6,6 +6,7 @@ import {IMessage, IUser} from "../../../common/data";
 import * as autolinker from "autolinker"
 import * as sanitizer from "sanitizer"
 import "../notification"
+import "../mobile"
 
 
 interface UserListState {
