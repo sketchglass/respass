@@ -33,6 +33,7 @@ a
   border-bottom: 1px solid darken($color-header-background, 15%)
   color: $color-header
   background-color: $color-header-background
+  z-index: 3
   & > *
     padding-left: $user-list-width + 10px
     padding-right: 10px
@@ -91,6 +92,7 @@ a
       max-width: 100vw
       display: flex
       flex-direction: column
+      z-index: 1
       .name
         margin-right: 10px
       .messages
@@ -130,6 +132,7 @@ a
         height: 44px
         margin: 8px 32px 32px 32px
         color: $color-text
+        z-index: 4
         &:hover
           border: 2px solid darken($color-message-form-border, 20%)
 
