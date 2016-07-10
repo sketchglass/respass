@@ -9,7 +9,7 @@ const WS_URL = API_SERVER.indexOf("https") === 0
   ? API_SERVER.replace("https", "wss")
   : API_SERVER.replace("http", "ws")
 
-const MESSAGE_PER_PAGE = 100
+const MESSAGE_PER_PAGE = 20
 
 function completeMessageData(message: IMessage) {
   if (!message.user.iconUrl) {
