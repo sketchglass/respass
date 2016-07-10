@@ -10,11 +10,18 @@ $color-header: #3f3f3f
 $header-height: 35px
 $user-list-width: 240px
 $color-text: #303030
-$color-link: #6d4faf
+$color-link: #4d6cc3
 
 body
   font-family: Raleway, "Hiragino Kaku Gothic ProN", メイリオ, sans-serif
   -webkit-font-smoothing: antialiased
+
+a
+  color: $color-link
+  text-decoration: none
+  &:hover
+    color: lighten($color-link, 15%)
+    text-decoration: underline
 
 .header
   position: fixed
@@ -38,6 +45,12 @@ body
   .user-view
     display: flex
     font-size: 12px
+    align-items: center
+    .icon
+      width: 26px
+      height: 26px
+      margin-right: 4px
+      border-radius: 50%
     .name
       margin-right: 8px
 
@@ -78,10 +91,6 @@ body
       flex-direction: column
       .name
         margin-right: 10px
-      a
-        color: $color-link
-        &:hover
-          color: darken($color-link, 15%)
       .messages
         margin: 0 40px
         .message

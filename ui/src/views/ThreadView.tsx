@@ -64,6 +64,7 @@ class UserView extends React.Component<{}, UserViewState> {
       const signOut = () => auth.logOut();
       return (
         <div className="user-view">
+          <img className="icon" src={user.iconUrl} />
           <div className="name">{user.name}</div>
           <a href="#" className="sign-out" onClick={signOut}>Log Out</a>
         </div>
@@ -75,9 +76,7 @@ class UserView extends React.Component<{}, UserViewState> {
           <a href="#" className="sign-in" onClick={signIn}>Log In</a>
         </div>
       )
-    } else {
-      return (
-        <div className="user-view">
+    } else { return ( <div className="user-view">
         </div>
       )
     }
