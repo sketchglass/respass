@@ -129,6 +129,7 @@ class MessageForm extends React.Component<{}, {}> {
 
 const HeaderView = () => {
   return <div className="header">
+    <img className="app-logo" src="logo.png" />
     <div className="app-name">respass</div>
     <UserView />
   </div>
