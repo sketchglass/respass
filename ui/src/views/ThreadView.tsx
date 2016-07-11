@@ -5,8 +5,8 @@ import {auth} from "../auth";
 import {IMessage, IUser} from "../../../common/data";
 import * as autolinker from "autolinker"
 import * as sanitizer from "sanitizer"
+import * as Hammer from "hammerjs"
 import "../notification"
-import "../mobile"
 
 
 interface UserListState {
@@ -189,7 +189,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
   render() {
     const {messages} = this.state;
     return (
-      <div className="app-container">
+      <div className="app-container" ref="appContainer">
         <HeaderView />
         <div className="thread">
           <UserList />
@@ -206,6 +206,21 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
     );
   }
 
-  newMessage() {
+  componentDidMount() {
+    if (window.matchMedia("(max-width: 500px)").matches) {
+      const mc = new Hammer(this.refs["appContainer"] as HTMLElement)
+      mc.on("swiperight", () => {
+        const messageForm = document.querySelector(".message-form") as HTMLElement
+        messageForm.style.zIndex = "0"
+        const userList = document.querySelector(".user-list") as HTMLElement
+        userList.style.display = "flex"
+      })
+      mc.on("swipeleft", () => {
+        const messageForm = document.querySelector(".message-form") as HTMLElement
+        messageForm.style.zIndex = "4"
+        const userList = document.querySelector(".user-list") as HTMLElement
+        userList.style.display = "none"
+      })
+    }
   }
 }
