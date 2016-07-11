@@ -7,7 +7,7 @@ $color-user-list-background: #525282
 $color-user-list: rgba(255,255,255,0.8)
 $color-header-background: #ffffff
 $color-header: #3f3f3f
-$header-height: 35px
+$header-height: 44px
 $user-list-width: 240px
 $color-text: #303030
 $color-link: #4d6cc3
@@ -33,10 +33,15 @@ a
   border-bottom: 1px solid darken($color-header-background, 15%)
   color: $color-header
   background-color: $color-header-background
-  z-index: 3
+  z-index: 1
   & > *
-    padding-left: $user-list-width + 10px
+    padding-left: 10px
     padding-right: 10px
+  .app-logo
+    width: 24px
+    height: 24px
+    padding-left: $user-list-width + 20px
+    padding-right: 0
   .app-name
     font-family: Raleway
     padding-top: 4px
@@ -138,7 +143,7 @@ a
 
 @media (max-width: 500px)
   .header
-    & > *
+    .app-logo
       padding-left: 10px
   .thread
     .user-list
