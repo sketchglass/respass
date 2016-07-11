@@ -26,7 +26,7 @@
     "migration:create": "touch migrations/$(date -u +'%Y%m%d%H%M%S')-migration.ts"
   },
   "author": "minamorl",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",

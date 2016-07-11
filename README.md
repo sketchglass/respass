@@ -34,3 +34,7 @@ npm start
 ```
 npm test
 ```
+
+## LICENSE
+
+MIT
