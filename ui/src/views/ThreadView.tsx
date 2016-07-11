@@ -38,12 +38,12 @@ class UserList extends React.Component<{}, UserListState> {
   }
 }
 
-interface UserViewState {
+interface UserLoginState {
   user?: IUser;
   loggedOut?: boolean;
 }
 
-class UserView extends React.Component<{}, UserViewState> {
+class UserView extends React.Component<{}, UserLoginState> {
   constructor() {
     super();
     this.state = {
@@ -106,12 +106,31 @@ const MessageView = (props: {message: IMessage}) => {
   );
 }
 
-class MessageForm extends React.Component<{}, {}> {
+class MessageForm extends React.Component<{}, UserLoginState> {
+  constructor() {
+    super()
+    this.state = {
+      user: null,
+      loggedOut: true
+    }
+    auth.on("change", () => {
+      this.setState({
+        user: auth.user,
+        loggedOut: auth.loggedOut
+      })
+    })
+  }
   render() {
     const onKeyPress = this.onKeyPress.bind(this);
-    return (
-      <textarea className="message-form" onKeyPress={onKeyPress} />
-    );
+    if (this.state.user) {
+      return (
+        <textarea className="message-form" onKeyPress={onKeyPress}></textarea>
+      )
+    } else {
+      return (
+        <textarea className="message-form" disabled placeholder="Please login first."></textarea>
+      )
+    }
   }
 
   onKeyPress(event: React.KeyboardEvent) {
