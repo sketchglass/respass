@@ -7,7 +7,6 @@ import * as autolinker from "autolinker"
 import * as sanitizer from "sanitizer"
 import * as Hammer from "hammerjs"
 import "../notification"
-import "../mobile"
 
 
 interface UserListState {
