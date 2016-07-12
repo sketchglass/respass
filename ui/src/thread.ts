@@ -24,7 +24,8 @@ class Thread extends EventEmitter {
   constructor() {
     super();
     this.connetion.onopen = () => {
-      this.fetchLatestMessages();
+      this.fetchLatestMessages()
+      this.fetchAvailableUsers()
     };
     this.connetion.onmessage = (event) => {
       try {
