@@ -32,12 +32,15 @@ app.get("/user", (req, res) => {
 });
 
 app.get("/connections", async (req, res) => {
-  let users = await User.findAll({include: [Connection]});
-  let response: IUser[] = users.filter(user => user.connections.length !== 0).map(user => {
+  let users = await User.findAll({
+    where: ['"connections"."userId" IS NOT NULL'],
+    include: [Connection]
+  });
+  let response: IUser[] = users.map(user => {
     return {
       name: user.name,
       iconUrl: user.iconUrl,
-      connecting: user.connections.length !== 0
+      connecting: true
     };
   });
   res.json(response);
