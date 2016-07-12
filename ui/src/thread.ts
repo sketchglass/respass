@@ -2,7 +2,6 @@ import {EventEmitter} from "events";
 import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
 import {IMessage, IUser} from "../../common/data";
 import {API_SERVER} from "./config";
-import {iconGenerator} from "./iconGenerator"
 const ReconnectingWebSocket: typeof WebSocket = require("ReconnectingWebSocket");
 
 const WS_URL = API_SERVER.indexOf("https") === 0
@@ -10,18 +9,6 @@ const WS_URL = API_SERVER.indexOf("https") === 0
   : API_SERVER.replace("http", "ws")
 
 const MESSAGE_PER_PAGE = 20
-
-function completeMessageData(message: IMessage) {
-  if (!message.user.iconUrl) {
-    message.user.iconUrl = iconGenerator.generate(message.user.name)
-  }
-}
-
-function completeUserData(user: IUser) {
-  if (!user.iconUrl) {
-    user.iconUrl = iconGenerator.generate(user.name)
-  }
-}
 
 export
 class Thread extends EventEmitter {
@@ -48,7 +35,6 @@ class Thread extends EventEmitter {
           break;
         case "NEW_MESSAGE":
           const newMessage = message as NewMessageEvent;
-          completeMessageData(message.value)
           this.messages.push(message.value);
           this.latestMessage = message.value;
           this.emit("messageAppend");
@@ -74,7 +60,6 @@ class Thread extends EventEmitter {
   async fetchAvailableUsers() {
     const response = await fetch(`${API_SERVER}/connections`);
     const availableUsers: IUser[] = await response.json();
-    availableUsers.forEach(completeUserData)
     this.availableUsers = availableUsers;
     this.emit("connectionUpdate");
   }
@@ -82,7 +67,6 @@ class Thread extends EventEmitter {
   async fetchLatestMessages() {
     const response = await fetch(`${API_SERVER}/messages?limit=${MESSAGE_PER_PAGE}`);
     const messages: IMessage[] = await response.json();
-    messages.forEach(completeMessageData)
     this.messages = messages;
     this.latestMessage = null;
     this.emit("messageAppend");
@@ -105,7 +89,6 @@ class Thread extends EventEmitter {
     if (messages.length == 0) {
       this.hasOlderMessages = false
     } else {
-      messages.forEach(completeMessageData)
       this.messages.unshift(...messages)
       this.latestMessage = null
       this.emit("messagePrepend")

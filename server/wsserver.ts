@@ -22,27 +22,28 @@ let broadcast = (message: string): void => {
 
 app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   let user: User = req.user
-  if (!user) {
-    // anonymous
-    let random_username = Math.random().toString(36).substring(7).slice(0, 8)
-    user = await User.create({
-      name: random_username,
-    })
+  let userData: IUser
+  let connection: Connection
+  if (user) {
+    userData = {name: user.name, iconUrl: user.iconUrl}
+
+    // whoami
+    try{
+      ws.send(await new WhoamiEvent(userData).response())
+    } catch (e) {
+      // do nothing
+    }
+
+    // create connection
+    connection = await Connection.create({userId: user["id"], available: true})
+
+    try {
+      // join event
+      broadcast(await new JoinEvent(userData).response())
+    } catch (e) {
+      // do nothing
+    }
   }
-  const userData = {name: user.name, iconUrl: user.iconUrl}
-
-  // whoami
-  try{
-    ws.send(await new WhoamiEvent(userData).response())
-  } catch (e) {
-    // do nothing
-  }
-
-  // create connection
-  const connection = await Connection.create({userId: user["id"], available: true})
-
-  // join event
-  broadcast(await new JoinEvent(userData).response())
 
   // ping/pong event
   let ping_count: number = 0
@@ -78,11 +79,13 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
       let {ev, value} = json
       let messageEvent: BaseReceiveEvent
 
-      if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
-        if (messageCount < messageLimitPerHour) {
-          messageEvent = new CreateMessageEvent(userData, value)
+      if(user) {
+        if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
+          if (messageCount < messageLimitPerHour) {
+            messageEvent = new CreateMessageEvent(userData, value)
+          }
+          messageCount++
         }
-        messageCount++
       }
       if (ev === ReceiveEventType[ReceiveEventType.PONG]) {
         if (++value == ping_count) {
@@ -96,13 +99,15 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   })
 
   let onClose = async () => {
-    let event = new LeftEvent(userData)
-    try {
-      broadcast(await event.response())
-      // destroy connection
-      await connection.destroy()
-    } catch(e) {
-      // failed
+    if(user) {
+      let event = new LeftEvent(userData)
+      try {
+        broadcast(await event.response())
+        // destroy connection
+        await connection.destroy()
+      } catch(e) {
+        // failed
+      }
     }
   }
   ws.on('close', onClose)
