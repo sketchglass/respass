@@ -125,9 +125,10 @@ class MessageForm extends React.Component<{}, UserLoginState> {
   }
   render() {
     const onKeyDown = this.onKeyDown.bind(this);
+    const onKeyPress = this.onKeyPress.bind(this);
     if (this.state.user) {
       return (
-        <textarea className="message-form" onKeyDown={onKeyDown} maxLength={messageTextLimit}></textarea>
+        <textarea className="message-form" onKeyDown={onKeyDown} onKeyPress={onKeyPress} maxLength={messageTextLimit}></textarea>
       )
     } else {
       return (
@@ -136,7 +137,7 @@ class MessageForm extends React.Component<{}, UserLoginState> {
     }
   }
 
-  onKeyDown(event: React.KeyboardEvent) {
+  onKeyPress(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
       const textarea = event.target as HTMLTextAreaElement;
       event.preventDefault();
@@ -145,7 +146,14 @@ class MessageForm extends React.Component<{}, UserLoginState> {
           thread.newMessage(textarea.value);
           textarea.value = "";
         }
-      } else {
+      }
+    }
+  }
+
+  onKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Enter") {
+      const textarea = event.target as HTMLTextAreaElement;
+      if (event.shiftKey || event.ctrlKey) {
         const start = textarea.selectionStart
         const end = textarea.selectionEnd
         const text = textarea.value
