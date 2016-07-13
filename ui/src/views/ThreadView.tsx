@@ -88,9 +88,14 @@ class UserView extends React.Component<{}, UserLoginState> {
 const MessageView = (props: {message: IMessage}) => {
   const {text, user, createdAt} = props.message;
   const time = moment(createdAt).format("MMM Do, h:mm A")
+  let sanitizedText = sanitizer.escape(text)
+  sanitizedText = sanitizedText.split("\n").map(line => {
+    return `<p>${line}</p>`
+  }).join("")
+
   const linked = () => {
     return {
-      __html: autolinker.link(sanitizer.escape(text))
+      __html: autolinker.link(sanitizedText)
     }
   }
   return (
@@ -122,10 +127,10 @@ class MessageForm extends React.Component<{}, UserLoginState> {
     })
   }
   render() {
-    const onKeyPress = this.onKeyPress.bind(this);
+    const onKeyDown = this.onKeyDown.bind(this);
     if (this.state.user) {
       return (
-        <textarea className="message-form" onKeyPress={onKeyPress} maxLength={messageTextLimit}></textarea>
+        <textarea className="message-form" onKeyDown={onKeyDown} maxLength={messageTextLimit}></textarea>
       )
     } else {
       return (
@@ -134,13 +139,21 @@ class MessageForm extends React.Component<{}, UserLoginState> {
     }
   }
 
-  onKeyPress(event: React.KeyboardEvent) {
+  onKeyDown(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
-      event.preventDefault();
       const textarea = event.target as HTMLTextAreaElement;
-      if (textarea.value !== "") {
-        thread.newMessage(textarea.value);
-        textarea.value = "";
+      event.preventDefault();
+      if (!event.shiftKey && !event.ctrlKey) {
+        if (textarea.value !== "") {
+          thread.newMessage(textarea.value);
+          textarea.value = "";
+        }
+      } else {
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const text = textarea.value
+        textarea.value = textarea.value.substring(0, start) + "\n" + textarea.value.substring(end, text.length)
+        textarea.selectionStart = textarea.selectionEnd = start + "\n".length
       }
     }
   }
