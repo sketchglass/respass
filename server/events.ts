@@ -1,6 +1,7 @@
 import { ReceiveEventType, SendEventType } from "../common/eventType"
 import { IMessage, IUser } from "../common/data";
 import { Message, User, messageToJSON } from "./models"
+import { messageTextLimit } from "../common/config"
 
 export let connection_number = 0
 
@@ -39,7 +40,7 @@ class CreateMessageEvent extends BaseReceiveEvent{
     })
   }
   async response() {
-    if (this.value === "")
+    if (this.value === "" || this.value.length > messageTextLimit)
       return
 
     await this.prepare()
