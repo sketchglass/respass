@@ -7,6 +7,7 @@ import * as autolinker from "autolinker"
 import * as sanitizer from "sanitizer"
 import * as Hammer from "hammerjs"
 import "../notification"
+import { messageTextLimit } from "../../../common/config"
 
 
 interface UserListState {
@@ -129,7 +130,7 @@ class MessageForm extends React.Component<{}, UserLoginState> {
     const onKeyDown = this.onKeyDown.bind(this);
     if (this.state.user) {
       return (
-        <textarea className="message-form" onKeyDown={onKeyDown}></textarea>
+        <textarea className="message-form" onKeyDown={onKeyDown} maxLength={messageTextLimit}></textarea>
       )
     } else {
       return (
