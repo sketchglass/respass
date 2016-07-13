@@ -139,8 +139,6 @@ class MessageForm extends React.Component<{}, UserLoginState> {
   }
 
   onKeyDown(event: React.KeyboardEvent) {
-    console.log("shift" + event.shiftKey)
-    console.log("ctrl" + event.ctrlKey)
     if (event.key === "Enter") {
       const textarea = event.target as HTMLTextAreaElement;
       event.preventDefault();
