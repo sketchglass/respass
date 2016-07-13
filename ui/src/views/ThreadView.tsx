@@ -87,9 +87,14 @@ class UserView extends React.Component<{}, UserLoginState> {
 const MessageView = (props: {message: IMessage}) => {
   const {text, user, createdAt} = props.message;
   const time = moment(createdAt).format("MMM Do, h:mm A")
+  let sanitizedText = sanitizer.escape(text)
+  sanitizedText = sanitizedText.split("\n").map(line => {
+    return `<p>${line}</p>`
+  }).join("")
+
   const linked = () => {
     return {
-      __html: autolinker.link(sanitizer.escape(text))
+      __html: autolinker.link(sanitizedText)
     }
   }
   return (
@@ -135,11 +140,13 @@ class MessageForm extends React.Component<{}, UserLoginState> {
 
   onKeyPress(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
-      event.preventDefault();
-      const textarea = event.target as HTMLTextAreaElement;
-      if (textarea.value !== "") {
-        thread.newMessage(textarea.value);
-        textarea.value = "";
+      if (!event.shiftKey) {
+        event.preventDefault();
+        const textarea = event.target as HTMLTextAreaElement;
+        if (textarea.value !== "") {
+          thread.newMessage(textarea.value);
+          textarea.value = "";
+        }
       }
     }
   }
