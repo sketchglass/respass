@@ -88,10 +88,7 @@ class UserView extends React.Component<{}, UserLoginState> {
 const MessageView = (props: {message: IMessage}) => {
   const {text, user, createdAt} = props.message;
   const time = moment(createdAt).format("MMM Do, h:mm A")
-  let sanitizedText = sanitizer.escape(text)
-  sanitizedText = sanitizedText.split("\n").map(line => {
-    return `<p>${line}</p>`
-  }).join("")
+  const sanitizedText = sanitizer.escape(text)
 
   const linked = () => {
     return {
