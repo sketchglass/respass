@@ -27,10 +27,7 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   let connection: Connection
   // validate connection
   if(req.hostname !== (url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")) {
-    console.log("//////////////////////////////////")
-    console.log("FRONTEND_URL " + url.parse(process.env["FRONTEND_URL"]).hostname)
-    console.log("req.hostname "+ req.hostname)
-    console.log("//////////////////////////////////")
+    ws.close()
   }
 
 
