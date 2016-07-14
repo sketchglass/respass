@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import {API_SERVER} from "./config";
+import {API_URL} from "./config";
 import {IUser} from "../../common/data";
 
 class Auth extends EventEmitter {
@@ -12,7 +12,7 @@ class Auth extends EventEmitter {
   }
 
   async fetchUser() {
-    const req = await fetch(`${API_SERVER}/user`, {
+    const req = await fetch(`${API_URL}/user`, {
       credentials: 'include'
     });
     this.user = await req.json();
@@ -23,11 +23,11 @@ class Auth extends EventEmitter {
   }
 
   logIn() {
-    location.href = `${API_SERVER}/auth/twitter`;
+    location.href = `${API_URL}/auth/twitter`;
   }
 
   logOut() {
-    location.href = `${API_SERVER}/logout`;
+    location.href = `${API_URL}/logout`;
   }
 }
 

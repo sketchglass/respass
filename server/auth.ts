@@ -8,7 +8,7 @@ import {sequelize, Message, User, TwitterIntegration, Connection} from "./models
 import {app} from "./app"
 
 const {
-  API_SERVER,
+  API_URL,
   FRONTEND_URL,
   SESSION_SECRET,
   TWITTER_CONSUMER_KEY,
@@ -48,7 +48,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new TwitterStrategy({
   consumerKey: TWITTER_CONSUMER_KEY,
   consumerSecret: TWITTER_CONSUMER_SECRET,
-  callbackURL: `${API_SERVER}/auth/twitter/callback`
+  callbackURL: `${API_URL}/auth/twitter/callback`
 }, async (token, secret, profile, done) => {
   try {
     const id = profile.id;

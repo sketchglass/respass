@@ -5,7 +5,7 @@ require('dotenv').config({path: "../.env"})
 
 let plugins = [
   new webpack.EnvironmentPlugin([
-    "API_SERVER",
+    "API_URL",
     "NODE_ENV",
   ]),
 ]

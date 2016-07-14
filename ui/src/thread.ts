@@ -1,12 +1,12 @@
 import {EventEmitter} from "events";
 import {NewMessageEvent, CreateMessageEvent} from "../../common/events";
 import {IMessage, IUser} from "../../common/data";
-import {API_SERVER} from "./config";
+import {API_URL} from "./config";
 const ReconnectingWebSocket: typeof WebSocket = require("ReconnectingWebSocket");
 
-const WS_URL = API_SERVER.indexOf("https") === 0
-  ? API_SERVER.replace("https", "wss")
-  : API_SERVER.replace("http", "ws")
+const WS_URL = API_URL.indexOf("https") === 0
+  ? API_URL.replace("https", "wss")
+  : API_URL.replace("http", "ws")
 
 const MESSAGE_PER_PAGE = 20
 
@@ -59,14 +59,14 @@ class Thread extends EventEmitter {
   }
 
   async fetchAvailableUsers() {
-    const response = await fetch(`${API_SERVER}/connections`);
+    const response = await fetch(`${API_URL}/connections`);
     const availableUsers: IUser[] = await response.json();
     this.availableUsers = availableUsers;
     this.emit("connectionUpdate");
   }
 
   async fetchLatestMessages() {
-    const response = await fetch(`${API_SERVER}/messages?limit=${MESSAGE_PER_PAGE}`);
+    const response = await fetch(`${API_URL}/messages?limit=${MESSAGE_PER_PAGE}`);
     const messages: IMessage[] = await response.json();
     this.messages = messages;
     this.latestMessage = null;
@@ -85,7 +85,7 @@ class Thread extends EventEmitter {
     }
     this.fetchingOlderMessages = true
     const lastId = this.messages[0].id
-    const response = await fetch(`${API_SERVER}/messages?limit=${MESSAGE_PER_PAGE}&nextId=${lastId}`);
+    const response = await fetch(`${API_URL}/messages?limit=${MESSAGE_PER_PAGE}&nextId=${lastId}`);
     const messages: IMessage[] = await response.json();
     if (messages.length == 0) {
       this.hasOlderMessages = false
