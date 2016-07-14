@@ -31,10 +31,6 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   }
   if(url.parse(req.headers["origin"] ).hostname
      !== (url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")) {
-    console.log("//////////////////////////")
-    console.log(req.headers["origin"])
-    console.log(url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")
-    console.log("//////////////////////////")
     ws.close()
   }
 
