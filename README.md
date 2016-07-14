@@ -35,6 +35,10 @@ npm start
 npm test
 ```
 
+## CONTRIBUTING
+
+See (CONTRIBUTING.md)[CONTRIBUTING.md]
+
 ## LICENSE
 
 MIT
