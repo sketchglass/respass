@@ -18,6 +18,7 @@
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
     "start": "NODE_ENV=development npm-run-all prepare:reset --parallel start:*",
     "deploy": "NODE_ENV=production npm-run-all prepare db:migrate build",
+    "postinstall": "npm run deploy",
     "pretest": "npm-run-all prepare:reset compile:ts db:test:prepare",
     "test": "NODE_ENV=test mocha lib/test",
     "db:migrate": "npm-run-all prepare:reset compile:ts && sequelize db:migrate",
