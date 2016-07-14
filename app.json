@@ -5,7 +5,7 @@
   "logo": "https://cdn.rawgit.com/sketchglass/respass/master/ui/dist/logo.png",
   "env": {
     "API_URL": {
-      "description": "The application URL itself"
+      "description": "The application URL itself. Example: https://<your-app-name>.herokuapp.com"
     },
     "SESSION_SECRET": {
       "description": "A secret key for sessions",
@@ -18,7 +18,7 @@
       "description": "The Twitter consumer secret for Twitter login"
     },
     "FRONTEND_URL": {
-      "description": "The application URL itself. Identical to API_URL in production"
+      "description": "The application URL itself. Identical to API_URL."
     },
     "NPM_CONFIG_PRODUCTION": {
       "description": "Must be false in this app. Set false to install Node devDependencies",
