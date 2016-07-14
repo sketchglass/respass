@@ -1,5 +1,6 @@
 import * as WebSocket from "ws"
 import * as express from "express";
+import * as url from "url"
 import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { app, server } from "./app";
@@ -10,7 +11,7 @@ const expressWs = require('express-ws')(app, server);
 const wss: WebSocket.Server = expressWs.getWss();
 const messageLimitPerHour = 100
 
-let broadcast = (message: string): void => {
+const broadcast = (message: string): void => {
   wss.clients.forEach((client) => {
     try {
       client.send(message)
@@ -24,6 +25,15 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   let user: User = req.user
   let userData: IUser
   let connection: Connection
+  // validate connection
+  if(req.hostname !== (url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")) {
+    console.log("//////////////////////////////////")
+    console.log("FRONTEND_URL " + url.parse(process.env["FRONTEND_URL"]).hostname)
+    console.log("req.hostname "+ req.hostname)
+    console.log("//////////////////////////////////")
+  }
+
+
   if (user) {
     userData = {name: user.name, iconUrl: user.iconUrl}
 
