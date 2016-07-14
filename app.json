@@ -1,0 +1,33 @@
+{
+  "name": "respass",
+  "description": "A WebSocket-based Chat System",
+  "repository": "https://github.com/sketchglass/respass/",
+  "logo": "https://cdn.rawgit.com/sketchglass/respass/master/ui/dist/logo.png",
+  "env": {
+    "API_URL": {
+      "description": "The application URL itself. Example: https://<your-app-name>.herokuapp.com"
+    },
+    "SESSION_SECRET": {
+      "description": "A secret key for sessions",
+      "generator": "secret"
+    },
+    "TWITTER_CONSUMER_KEY": {
+      "description": "The Twitter consumer key for Twitter login"
+    },
+    "TWITTER_CONSUMER_SECRET": {
+      "description": "The Twitter consumer secret for Twitter login"
+    },
+    "FRONTEND_URL": {
+      "description": "The application URL itself. Identical to API_URL."
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "Must be false in this app. Set false to install Node devDependencies",
+      "value": "false"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    }
+  ]
+}
