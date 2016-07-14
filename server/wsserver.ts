@@ -26,7 +26,15 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
   let userData: IUser
   let connection: Connection
   // validate connection
-  if(req.hostname !== (url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")) {
+  if(!req.headers["origin"]) {
+    ws.close()
+  }
+  if(url.parse(req.headers["origin"] ).hostname
+     !== (url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")) {
+    console.log("//////////////////////////")
+    console.log(req.headers["origin"])
+    console.log(url.parse(process.env["FRONTEND_URL"]).hostname || "127.0.0.1")
+    console.log("//////////////////////////")
     ws.close()
   }
 

@@ -15,10 +15,16 @@ describe("wsserver", () => {
       server.listen(0, () => {
         let port = server.address().port
         ws1 = new WebSocket(`ws://127.0.0.1:${port}/`, {
-          headers: { "Sec-WebSocket-Accept": "1" }
+          headers: {
+            "Sec-WebSocket-Accept": "1",
+            "Origin": `http://127.0.0.1:${port}`,
+          }
         })
         ws2 = new WebSocket(`ws://127.0.0.1:${port}/`, {
-          headers: { "Sec-WebSocket-Accept": "2" }
+          headers: {
+            "Sec-WebSocket-Accept": "2",
+            "Origin": `http://127.0.0.1:${port}`,
+          }
         })
         done()
       })
@@ -119,10 +125,16 @@ describe("wsserver", () => {
       server.listen(0, () => {
         let port = server.address().port
         ws1 = new WebSocket(`ws://127.0.0.1:${port}/`, {
-          headers: { "Sec-WebSocket-Accept": "1" }
+          headers: {
+            "Sec-WebSocket-Accept": "1",
+            "Origin": `http://127.0.0.1:${port}`,
+          }
         })
         ws2 = new WebSocket(`ws://127.0.0.1:${port}/`, {
-          headers: { "Sec-WebSocket-Accept": "2" }
+          headers: {
+            "Sec-WebSocket-Accept": "2",
+            "Origin": `http://127.0.0.1:${port}`,
+          }
         })
         done()
       })
