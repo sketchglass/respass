@@ -167,8 +167,11 @@ class MessageForm extends React.Component<{}, UserLoginState> {
 
 const HeaderView = () => {
   return <div className="header">
-    <img className="app-logo" src="logo.png" />
-    <div className="app-name">respass</div>
+    <div className="app-link">
+      <img className="app-logo" src="logo.png" />
+      <div className="app-name">respass</div>
+      <a href="https://github.com/sketchglass/respass" />
+    </div>
     <UserView />
   </div>
 }
