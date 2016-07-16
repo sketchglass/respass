@@ -28,11 +28,13 @@ class UserList extends React.Component<{}, UserListState> {
   }
 
   render() {
+    const MAX_USERS = 10
     const {users} = this.state;
     return (
       <div className="user-list">
         <ul>
-          {users.map((user, i)=><li key={i}><img className="icon" src={user.iconUrl} /><span className="name">{user.name}</span></li>)}
+          {users.slice(0, MAX_USERS).map((user, i)=><li key={i}><img className="icon" src={user.iconUrl} /><span className="name">{user.name}</span></li>)}
+          {users.length > MAX_USERS ? [<li className="more-users">+ {users.length - MAX_USERS} users</li>] : []}
         </ul>
       </div>
     );
