@@ -34,6 +34,10 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
     ws.close()
   }
 
+  if (!user && process.env.SUPPORT_ANONYMOUS_USER === "true") {
+    const name = Math.random().toString(36).substring(7).slice(0, 8)
+    user = await User.create({name})
+  }
 
   if (user) {
     userData = {name: user.name, iconUrl: user.iconUrl}
