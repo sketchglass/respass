@@ -7,6 +7,7 @@ let plugins = [
   new webpack.EnvironmentPlugin([
     "API_URL",
     "NODE_ENV",
+    "GA_TRACKING_ID",
   ]),
 ]
 
