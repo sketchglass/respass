@@ -7,6 +7,10 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+## Notes
+
+In production environment, you have to use this application with **https**. If not, the server will automatically redirect to https.
+
 ## Prerequisites
 
 - PostgreSQL
