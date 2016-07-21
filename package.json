@@ -12,7 +12,7 @@
     "build:frontend": "cd ui && webpack",
     "build:server": "tsc",
     "build": "npm-run-all --parallel build:*",
-    "watch:frontend": "cd ui && webpack-dev-server -d --inline",
+    "watch:frontend": "cd ui && webpack-dev-server -d --inline --host '0.0.0.0'",
     "open-browser": "node -e 'setTimeout(function(){require(`open`)(`http://127.0.0.1:23000`)}, 2000)'",
     "start:frontend": "npm-run-all --parallel open-browser watch:frontend",
     "start:server": "npm run compile:ts && node ./lib/server/index.js",

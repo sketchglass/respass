@@ -13,12 +13,46 @@ Websocket-based chat app implementation written in TypeScript
 
 In production environment, you have to use this application with **https**. If not, the server will automatically redirect to https.
 
-## Prerequisites
+## Development
+
+### With Docker
+
+#### Prerequisites
+
+- Docker
+- Docker Compose
+
+#### Build Images
+
+```
+docker-compose build
+```
+
+#### Update Typings and Node Modules
+```
+docker-compose run --entrypoint docker/init.sh respass
+```
+
+#### Run
+
+```
+docker-compose up
+```
+
+#### Test
+
+```
+docker-compose run --entrypoint docker/test.sh respass
+```
+
+### Manual
+
+#### Prerequisites
 
 - PostgreSQL
 - NodeJS (>=6)
 
-## DB Settings
+#### DB Settings
 
 Create User `respass` with empty password.
 ```
@@ -27,7 +61,7 @@ createdb respass-dev
 createdb respass-test
 ```
 
-## Run
+#### Run
 
 ```
 cp .env.sample .env
@@ -37,7 +71,7 @@ npm run db:migrate
 npm start
 ```
 
-## Testing
+#### Testing
 
 ```
 npm test
