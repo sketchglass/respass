@@ -1,0 +1,47 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: 'respass'
+      POSTGRES_USER: 'respass'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  postgres-dev:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: 'respass'
+      POSTGRES_USER: 'respass'
+      POSTGRES_DB: 'respass-dev'
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+
+  postgres-test:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: 'respass'
+      POSTGRES_USER: 'respass'
+      POSTGRES_DB: 'respass-test'
+
+  respass:
+    build: .
+    env_file: .env
+    ports:
+      - "8080:8080"
+      - "23000:23000"
+    environment:
+      PORT: 8080
+      DATABASE_URL: 'postgres://respass:respass@postgres:5432/respass'
+      DATABASE_URL_DEV: 'postgres://respass:respass@postgres-dev:5432/respass-dev'
+      DATABASE_URL_TEST: 'postgres://respass:respass@postgres-test:5432/respass-test'
+    links:
+      - postgres
+      - postgres-dev
+      - postgres-test
+    volumes:
+      - .:/respass
+
+volumes:
+  postgres-data:
+  postgres-dev-data:
