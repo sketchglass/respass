@@ -6,7 +6,6 @@
   "scripts": {
     "prepare:reset": "rm -rf lib",
     "prepare:npm": "npm install",
-    "prepare:typings": "typings install",
     "prepare": "npm-run-all --parallel prepare:*",
     "compile:ts": "tsc",
     "build:frontend": "cd ui && webpack",
@@ -18,7 +17,7 @@
     "start:server": "npm run compile:ts && node ./lib/server/index.js",
     "start": "NODE_ENV=development npm-run-all prepare:reset --parallel start:*",
     "deploy": "NODE_ENV=production npm-run-all prepare db:migrate build",
-    "heroku-postbuild": "npm-run-all prepare:typings build db:migrate",
+    "heroku-postbuild": "npm-run-all build db:migrate",
     "pretest": "npm-run-all prepare:reset compile:ts db:test:prepare",
     "test": "NODE_ENV=test mocha lib/test",
     "db:migrate": "npm-run-all prepare:reset compile:ts && sequelize db:migrate",
@@ -64,7 +63,6 @@
     "supertest": "^1.2.0",
     "ts-loader": "^0.8.2",
     "typescript": "^2.0.0",
-    "typings": "^1.3.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },
