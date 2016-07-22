@@ -41,7 +41,7 @@ describe("events", () => {
     let event = new events.LeftEvent(user)
     event.prepare = async () => {}
     it("should decrease connection_number", async () => {
-      events.connection_number = 1
+      events.setConnectionNumber(1)
       assert.equal(events.connection_number, 1)
       await event.response()
       assert.equal(events.connection_number, 0)
