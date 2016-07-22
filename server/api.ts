@@ -14,12 +14,12 @@ app.get("/messages", async (req, res) => {
     order: '"message"."id" DESC', // <- TODO: fix Sequelize
     where, limit
   })
-  const data = messages.map(m => messageToJSON(m, m.user)).reverse()
+  const data = messages.map(m => messageToJSON(m, m.user!)).reverse()
   res.json(data)
 })
 
 app.get("/user", (req, res) => {
-  const user: User = req.user
+  const user: User|undefined = req.user
   if (user) {
     const json: IUser = {
       name: user.name,

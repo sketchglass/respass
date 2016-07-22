@@ -29,7 +29,7 @@ class UserList extends React.Component<{}, UserListState> {
 
   render() {
     const MAX_USERS = 10
-    const {users} = this.state;
+    const users = this.state.users!;
     return (
       <div className="user-list">
         <ul>
@@ -50,7 +50,7 @@ class UserView extends React.Component<{}, UserLoginState> {
   constructor() {
     super();
     this.state = {
-      user: null,
+      user: undefined,
       loggedOut: false
     };
     auth.on("change", () => {
@@ -115,7 +115,7 @@ class MessageForm extends React.Component<{}, UserLoginState> {
   constructor() {
     super()
     this.state = {
-      user: null,
+      user: undefined,
       loggedOut: true
     }
     auth.on("change", () => {
@@ -231,7 +231,7 @@ class ThreadView extends React.Component<{}, ThreadViewState> {
   }
 
   render() {
-    const {messages} = this.state;
+    const messages = this.state.messages!;
     return (
       <div className="app-container" ref="appContainer">
         <HeaderView />

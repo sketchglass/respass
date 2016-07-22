@@ -10,16 +10,18 @@ export function setConnectionNumber(num: number) {
 }
 
 export
-abstract class BaseReceiveEvent {
+interface ReceiveEvent {
   ev: SendEventType
-  constructor(protected user: IUser, protected value?: string) {
-  }
-  abstract prepare(): Promise<void>
-  abstract response(): Promise<string>
+
+  prepare(): Promise<void>
+  response(): Promise<string|undefined>
 }
 export
-class WhoamiEvent extends BaseReceiveEvent{
+class WhoamiEvent implements ReceiveEvent {
   ev = SendEventType.WHOAMI
+
+  constructor(public user: IUser) {
+  }
 
   async prepare() {
   }
@@ -28,9 +30,12 @@ class WhoamiEvent extends BaseReceiveEvent{
   }
 }
 export
-class CreateMessageEvent extends BaseReceiveEvent{
+class CreateMessageEvent implements ReceiveEvent {
   ev = SendEventType.NEW_MESSAGE
   message: Message
+
+  constructor(public user: IUser, public value: string) {
+  }
 
   async prepare() {
     const user = await User.findOne({
@@ -55,19 +60,27 @@ class CreateMessageEvent extends BaseReceiveEvent{
   }
 }
 export
-class DeleteMessageEvent extends BaseReceiveEvent{
+class DeleteMessageEvent implements ReceiveEvent {
   ev = SendEventType.DELETE_MESSAGE
+
+  constructor(public id: number) {
+  }
+
   async prepare() {
-    await Message.destroy({where: {id: this.value}})
+    await Message.destroy({where: {id: this.id}})
   }
   async response() {
     await this.prepare()
-    return newMessage(this.ev, this.value)
+    return newMessage(this.ev, this.id)
   }
 }
 export
-class JoinEvent extends BaseReceiveEvent {
+class JoinEvent implements ReceiveEvent {
   ev = SendEventType.USER_JOIN
+
+  constructor(public user: IUser) {
+  }
+
   async prepare() {
   }
   async response() {
@@ -80,8 +93,12 @@ class JoinEvent extends BaseReceiveEvent {
   }
 }
 export
-class LeftEvent extends BaseReceiveEvent {
+class LeftEvent implements ReceiveEvent {
   ev = SendEventType.USER_LEAVE
+
+  constructor(public user: IUser) {
+  }
+
   async prepare() {
   }
   async response() {

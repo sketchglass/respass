@@ -8,7 +8,7 @@ import * as ReactDOM from "react-dom";
 import ThreadView from "./views/ThreadView";
 
 window.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(<ThreadView></ThreadView>, document.getElementById("app"));
+  ReactDOM.render(<ThreadView></ThreadView>, document.getElementById("app")!);
 });
 
 const {GA_TRACKING_ID} = process.env

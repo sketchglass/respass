@@ -60,7 +60,7 @@ describe("events", () => {
 
     it("returns correct message", async () => {
       const val = await event.response()
-      let parsed = JSON.parse(val)
+      let parsed = JSON.parse(val!)
       const expected: IMessage = {
         id: event.message.id,
         text: message,
@@ -74,7 +74,7 @@ describe("events", () => {
     })
   })
   describe("DeleteMessageEvent", () => {
-    let event = new events.DeleteMessageEvent(user, "1")
+    let event = new events.DeleteMessageEvent(1)
     // override prepare methods for testing
     let prepare_called: boolean
     event.prepare = async () => { prepare_called = true }
