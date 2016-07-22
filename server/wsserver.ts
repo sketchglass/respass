@@ -5,7 +5,7 @@ import { Message, User, Connection } from "./models"
 import { IMessage, IUser } from "../common/data";
 import { app, server } from "./app";
 import { ReceiveEventType, SendEventType } from "../common/eventType"
-import { newMessage, WhoamiEvent, BaseReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
+import { newMessage, WhoamiEvent, ReceiveEvent, JoinEvent, CreateMessageEvent, DeleteMessageEvent, LeftEvent } from "./events"
 
 const expressWs = require('express-ws')(app, server);
 const wss: WebSocket.Server = expressWs.getWss();
@@ -22,9 +22,9 @@ const broadcast = (message: string): void => {
 }
 
 app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
-  let user: User = req.user
-  let userData: IUser
-  let connection: Connection
+  let user: User|undefined = req.user
+  let userData: IUser|undefined
+  let connection: Connection|undefined
   // validate connection
   if(!req.headers["origin"]) {
     ws.close()
@@ -92,9 +92,9 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
     try {
       let json = JSON.parse(undecoded_json)
       let {ev, value} = json
-      let messageEvent: BaseReceiveEvent
+      let messageEvent: ReceiveEvent|undefined;
 
-      if(user) {
+      if (userData) {
         if (ev === ReceiveEventType[ReceiveEventType.CREATE_MESSAGE]) {
           if (messageCount < messageLimitPerHour) {
             messageEvent = new CreateMessageEvent(userData, value)
@@ -107,19 +107,26 @@ app["ws"]("/", async (ws: WebSocket, req: express.Request) => {
           ping_available = true
         }
       }
-      broadcast(await messageEvent.response())
+      if (messageEvent) {
+        const res = await messageEvent.response();
+        if (res) {
+          broadcast(res);
+        }
+      }
     } catch(e) {
       // failed
     }
   })
 
   let onClose = async () => {
-    if(user) {
+    if (userData) {
       let event = new LeftEvent(userData)
       try {
         broadcast(await event.response())
         // destroy connection
-        await connection.destroy()
+        if (connection) {
+          await connection.destroy()
+        }
       } catch(e) {
         // failed
       }

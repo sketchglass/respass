@@ -9,6 +9,6 @@ interface IMessage {
 export
 interface IUser {
   name: string
-  iconUrl: string
+  iconUrl: string|null
   connecting?: boolean
 }

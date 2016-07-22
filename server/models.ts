@@ -5,13 +5,17 @@ const config = require("../../config/db")[process.env.NODE_ENV || "development"]
 export let sequelize = new Sequelize(config.url)
 
 interface MessageParams {
-  text?: string;
-  userId?: number;
-  id?: number;
+  text?: string
+  userId?: number
+  id?: number
   createdAt?: Date
 }
-export interface Message extends Sequelize.Instance<MessageParams>, MessageParams {
-  user?: User;
+export interface Message extends Sequelize.Instance<MessageParams> {
+  user?: User
+  text: string
+  userId: number
+  id: number
+  createdAt: Date
 }
 
 export let Message = sequelize.define<Message, {}>('message', {
@@ -35,10 +39,13 @@ interface UserParams {
   id?: number
   iconUrl?: string
 }
-export interface User extends Sequelize.Instance<UserParams>, UserParams {
-  messages?: Message[];
-  connections?: Connection[];
-  twitterIntegration?: TwitterIntegration;
+export interface User extends Sequelize.Instance<UserParams> {
+  messages?: Message[]
+  connections?: Connection[]
+  twitterIntegration?: TwitterIntegration
+  name: string
+  id: number
+  iconUrl: string|null
 }
 
 export let User = sequelize.define<User, UserParams>('user', {
@@ -47,12 +54,15 @@ export let User = sequelize.define<User, UserParams>('user', {
 })
 
 interface ConnectionParams {
-  available?: boolean;
-  userId?: number;
-  id?: number;
+  available?: boolean
+  userId?: number
+  id?: number
 }
-export interface Connection extends Sequelize.Instance<ConnectionParams>, ConnectionParams {
-  user?: User;
+export interface Connection extends Sequelize.Instance<ConnectionParams> {
+  user?: User
+  available: boolean
+  userId: number
+  id: number
 }
 
 export let Connection = sequelize.define<Connection, ConnectionParams>('connection', {
@@ -60,12 +70,15 @@ export let Connection = sequelize.define<Connection, ConnectionParams>('connecti
 })
 
 interface TwitterIntegrationParams {
-  twitterId?: string;
-  userId?: number;
-  id?: number;
+  twitterId?: string
+  userId?: number
+  id?: number
 }
-export interface TwitterIntegration extends Sequelize.Instance<TwitterIntegrationParams>, TwitterIntegrationParams {
-  user?: User;
+export interface TwitterIntegration extends Sequelize.Instance<TwitterIntegrationParams> {
+  user?: User
+  twitterId: string
+  userId: number
+  id: number
 }
 
 export let TwitterIntegration = sequelize.define<TwitterIntegration, TwitterIntegrationParams>('twitterIntegration', {
