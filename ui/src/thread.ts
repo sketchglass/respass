@@ -14,10 +14,10 @@ export
 class Thread extends EventEmitter {
   connetion = new ReconnectingWebSocket(WS_URL);
   messages: IMessage[] = [];
-  latestMessage: IMessage = null;
+  latestMessage: IMessage|undefined
   connectionCount = 0;
   availableUsers: IUser[] = [];
-  currentUser: IUser = null;
+  currentUser: IUser|undefined
   hasOlderMessages = true
   fetchingOlderMessages = false
 
@@ -69,7 +69,7 @@ class Thread extends EventEmitter {
     const response = await fetch(`${API_URL}/messages?limit=${MESSAGE_PER_PAGE}`);
     const messages: IMessage[] = await response.json();
     this.messages = messages;
-    this.latestMessage = null;
+    this.latestMessage = undefined
     this.emit("messageAppend");
   }
 
@@ -91,7 +91,7 @@ class Thread extends EventEmitter {
       this.hasOlderMessages = false
     } else {
       this.messages.unshift(...messages)
-      this.latestMessage = null
+      this.latestMessage = undefined
       this.emit("messagePrepend")
     }
     this.fetchingOlderMessages = false

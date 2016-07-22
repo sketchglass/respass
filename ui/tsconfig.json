@@ -4,6 +4,7 @@
         "target": "es6",
         "noImplicitAny": true,
         "suppressImplicitAnyIndexErrors": true,
+        "strictNullChecks": true,
         "sourceMap": false,
         "jsx": "react",
         "outDir": "./lib",
