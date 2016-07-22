@@ -139,7 +139,7 @@ class MessageForm extends React.Component<{}, UserLoginState> {
     }
   }
 
-  onKeyPress(event: React.KeyboardEvent) {
+  onKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter") {
       const textarea = event.target as HTMLTextAreaElement;
       event.preventDefault();
@@ -152,7 +152,7 @@ class MessageForm extends React.Component<{}, UserLoginState> {
     }
   }
 
-  onKeyDown(event: React.KeyboardEvent) {
+  onKeyDown(event: KeyboardEvent) {
     if (event.key === "Enter") {
       const textarea = event.target as HTMLTextAreaElement;
       if (event.shiftKey || event.ctrlKey) {

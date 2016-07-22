@@ -5,6 +5,10 @@ import { messageTextLimit } from "../common/config"
 
 export let connection_number = 0
 
+export function setConnectionNumber(num: number) {
+  connection_number = num;
+}
+
 export
 abstract class BaseReceiveEvent {
   ev: SendEventType

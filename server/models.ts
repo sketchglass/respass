@@ -10,7 +10,7 @@ interface MessageParams {
   id?: number;
   createdAt?: Date
 }
-export interface Message extends Sequelize.Instance<Message, MessageParams>, MessageParams {
+export interface Message extends Sequelize.Instance<MessageParams>, MessageParams {
   user?: User;
 }
 
@@ -35,7 +35,7 @@ interface UserParams {
   id?: number
   iconUrl?: string
 }
-export interface User extends Sequelize.Instance<User, UserParams>, UserParams {
+export interface User extends Sequelize.Instance<UserParams>, UserParams {
   messages?: Message[];
   connections?: Connection[];
   twitterIntegration?: TwitterIntegration;
@@ -51,7 +51,7 @@ interface ConnectionParams {
   userId?: number;
   id?: number;
 }
-export interface Connection extends Sequelize.Instance<Connection, ConnectionParams>, ConnectionParams {
+export interface Connection extends Sequelize.Instance<ConnectionParams>, ConnectionParams {
   user?: User;
 }
 
@@ -64,7 +64,7 @@ interface TwitterIntegrationParams {
   userId?: number;
   id?: number;
 }
-export interface TwitterIntegration extends Sequelize.Instance<TwitterIntegration, TwitterIntegrationParams>, TwitterIntegrationParams {
+export interface TwitterIntegration extends Sequelize.Instance<TwitterIntegrationParams>, TwitterIntegrationParams {
   user?: User;
 }
 

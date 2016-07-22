@@ -6,11 +6,17 @@
         "suppressImplicitAnyIndexErrors": true,
         "sourceMap": false,
         "jsx": "react",
-        "outDir": "./lib"
+        "outDir": "./lib",
+        "types": [
+          "node"
+        ],
+        "typeRoots": [
+          "../node_modules",
+          "../node_modules/@types"
+        ]
     },
-    "files": [
-      "../typings/index.d.ts",
-      "./src/index.tsx"
+    "include": [
+        "src/**/*"
     ],
     "compileOnSave": false
 }

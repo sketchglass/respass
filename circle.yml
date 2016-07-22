@@ -2,9 +2,6 @@ machine:
   node:
     version: v6.1.0
 dependencies:
-  pre:
-    - npm install -g typings
-    - typings install
   post:
     - npm rebuild
 database:
